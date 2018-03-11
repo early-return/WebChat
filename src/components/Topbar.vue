@@ -69,14 +69,14 @@ export default {
   font-weight: bold;
   color: #66757f;
   background-color: #fff;
-  box-shadow: 0 0 1px #888;
+  box-shadow: 0 1px 2px #888;
 }
 
 
 
 .navbar {
   display: flex;
-  flex-direction: row;
+  margin: 0 auto;
 }
 
 .navbar a {

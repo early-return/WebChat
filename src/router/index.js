@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Hello from '@/components/Hello';
+import Session from '@/components/Session';
 import Chat from '@/components/Chat';
 import Group from '@/components/Group';
 import Status from '@/components/Status';
@@ -13,7 +13,7 @@ export default new Router({
     {
       path: '/',
       name: 'Hello',
-      component: Hello,
+      component: Session,
     },
     {
       path: '/chat',
