@@ -32,13 +32,14 @@ export default {
 textarea {
   flex-grow: 1;
   margin-right: 10px;
-  min-height: 1em;
-  padding: 10px;
+  height: 16px;
+  padding: 5px 10px;
   font-size: 14px;
-  border-radius: 10px;
+  resize: none;
+  border-radius: 15px;
   border: 1px solid #A5D5E8;
   background-color: #FFF;
-  overflow-y: visible;
+  overflow: hidden;
   outline: none;
 }
 .button {

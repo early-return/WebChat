@@ -9,7 +9,7 @@ function messagesData() {
     const message = {
       id: 100 - i,
       from: Random.cname(),
-      fromAvatar: Random.dataImage('200x200', '图片'),
+      fromAvatar: Random.dataImage('50x50', '图片'),
       message: Random.csentence(),
     };
     messages.push(message);

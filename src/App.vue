@@ -17,6 +17,9 @@ export default {
 
     };
   },
+  mounted() {
+
+  },
   methods: {
   },
   components: {
@@ -33,6 +36,7 @@ body,
 }
 #app {
   display: flex;
+  overflow: auto;
   flex-direction: column;
 }
 body {

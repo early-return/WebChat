@@ -9,6 +9,7 @@
 import Conversation from '@/components/converse/Conversation';
 import InputBar from '@/components/common/InputBar';
 
+
 export default {
   name: 'converse',
   data() {
@@ -16,6 +17,13 @@ export default {
       messages: [
       ],
     };
+  },
+  created() {
+    const vm = this;
+    vm.$http.get('/api/test/messages')
+      .then((response) => {
+        vm.messages = response.data;
+      });
   },
   methods: {
     sendMessage(payload) {
