@@ -39,7 +39,7 @@ export default {
   border-radius: 50%;
 }
 .message .bubble {
-  background-color: lightblue;
+  background-color: #E6ECF0;
   word-break: break-all;
   padding: 10px;
   margin: 0 10px 0 10px;

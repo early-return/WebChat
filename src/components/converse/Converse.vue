@@ -1,9 +1,15 @@
 <template>
-  <conversation :messages="messages"></conversation>
+  <div class="content">
+    <div class="container">
+      <conversation class="conversation" :messages="messages"></conversation>
+      <input-bar class="input-bar" button="发送"></input-bar>
+    </div>
+  </div>
 </template>
 
 <script>
 import Conversation from '@/components/converse/Conversation';
+import InputBar from '@/components/common/InputBar';
 
 export default {
   name: 'converse',
@@ -75,7 +81,35 @@ export default {
   },
   components: {
     Conversation,
+    InputBar,
   },
 };
 </script>
+
+<style scoped>
+.content {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  border: 1px solid #e6ecf0;
+  left: 0;
+  bottom: 0;
+}
+.input-bar {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.conversation {
+  box-sizing: border-box;
+  background-color: #fff;
+  border-bottom: 1px solid #e6ecf0;
+  padding: 10px;
+}
+</style>
+
 

@@ -69,7 +69,7 @@ export default {
   font-weight: bold;
   color: #66757f;
   background-color: #fff;
-  box-shadow: 0 1px 2px #888;
+  box-shadow: 0 0px 1px #888;
 }
 
 

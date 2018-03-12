@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <topbar></topbar>
+    <topbar class="topbar"></topbar>
     <main>
       <div class="container">
         <router-view></router-view>
@@ -37,6 +37,7 @@ body {
 .container {
   width: 100%;
   max-width: 1000px;
+  margin: 0 auto;
 }
 
 main {
@@ -45,3 +46,12 @@ main {
   justify-content: center;
 }
 </style>
+
+<style scoped>
+.top-bar {
+  border-bottom: 1px solid #e6ecf0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  z-index: 1000;
+}
+</style>
+
