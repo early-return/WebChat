@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Conversation from '@/components/converse/Conversation';
+import Converse from '@/components/converse/Converse';
 import Chat from '@/components/Chat';
 import Group from '@/components/Group';
 import Status from '@/components/Status';
@@ -13,7 +13,7 @@ export default new Router({
     {
       path: '/',
       name: 'Conversation',
-      component: Conversation,
+      component: Converse,
     },
     {
       path: '/chat',
