@@ -58,12 +58,10 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 .topbar {
   display: flex;
-  position: fixed;
   width: 100%;
-  top: 0;
   justify-content: center;
   font-size: 14px;
   font-weight: bold;

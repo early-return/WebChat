@@ -2,9 +2,7 @@
   <div id="app">
     <topbar class="topbar"></topbar>
     <main>
-      <div class="container">
-        <router-view></router-view>
-      </div>
+      <router-view></router-view>
     </main>
   </div>
 </template>
@@ -28,6 +26,15 @@ export default {
 </script>
 
 <style>
+html,
+body,
+#app {
+  height: 100%;
+}
+#app {
+  display: flex;
+  flex-direction: column;
+}
 body {
   padding: 0;
   margin: 0;
@@ -41,17 +48,17 @@ body {
 }
 
 main {
-  margin-top: 55px;
+  flex-grow: 1;
   display: flex;
   justify-content: center;
 }
+
 </style>
 
 <style scoped>
-.top-bar {
-  border-bottom: 1px solid #e6ecf0;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+.topbar {
   z-index: 1000;
+  flex-shrink: 0;
 }
 </style>
 

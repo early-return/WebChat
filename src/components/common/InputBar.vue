@@ -1,6 +1,6 @@
 <template>
   <div class="input-bar">
-    <textarea autocomplete="off" wrap="hard" v-model="text"></textarea><a class="button" href="#">{{ button }}</a>
+    <textarea autocomplete="off" wrap="hard" v-model="text"></textarea><a class="button" @click="post" href="#">{{ button }}</a>
   </div>
 </template>
 
@@ -12,6 +12,12 @@ export default {
     return {
       text: '',
     };
+  },
+  methods: {
+    post() {
+      this.$emit('post', { text: this.text });
+      this.text = '';
+    },
   },
 };
 </script>
@@ -38,11 +44,11 @@ textarea {
 .button {
   display: block;
   background-color: #4BACD2;
-  padding: 8px 10px;
+  padding: 5px 10px;
   font-size: 14px;
   border: 0;
   text-decoration: none;
-  border-radius: 16px;
+  border-radius: 15px;
   color: #FFF;
   transform: background-color 0.3s;
 }

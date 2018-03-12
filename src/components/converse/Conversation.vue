@@ -1,8 +1,11 @@
 <template>
   <div class="session">
-    <div class="message" :class="{ self: msg.name === 'Hehe' }" v-for="msg in messages" :key="msg.id">
+    <div class="message" v-if="messages" :class="{ self: msg.name === 'Hehe' }" v-for="msg in messages" :key="msg.id">
       <img class="avatar" src="../../assets/logo.png">
       <p class="bubble">{{ msg.message }}</p>
+    </div>
+    <div class="no-message" v-if="!messages || messages.length === 0">
+      还没有聊天记录，发送第一条消息开始聊天吧！
     </div>
   </div>
 </template>
@@ -21,17 +24,21 @@ export default {
 
 <style scoped>
 .session {
+  padding: 15px;
   display: flex;
   width: 100%;
   flex-direction: column-reverse;
   align-items: flex-start;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .message {
   max-width: 80%;
   display: flex;
+  flex-shrink: 0;
   align-items: flex-end;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .message .avatar {
   width: 30px;
@@ -54,6 +61,26 @@ export default {
 }
 .message.self {
   align-self: flex-end;
+}
+.no-message {
+  background-color: #E6ECF0;
+  border-radius: 15px;
+  align-self: center;
+  padding: 5px 10px;
+  color: #888;
+  margin: auto 0;
+}
+
+@media (max-width: 1000px) {
+  .session {
+    background-color: #E6ECF0;
+  }
+  .message .bubble {
+    background-color: #FFF;
+  }
+  .no-message {
+    background-color: #FFF;
+  }
 }
 
 </style>
