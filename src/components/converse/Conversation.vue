@@ -1,7 +1,7 @@
 <template>
   <div class="session">
     <div class="message" :class="{ self: msg.name === 'Hehe' }" v-for="msg in messages" :key="msg.id">
-      <img class="avatar" src="../assets/logo.png">
+      <img class="avatar" src="../../assets/logo.png">
       <p class="bubble">{{ msg.message }}</p>
     </div>
   </div>
