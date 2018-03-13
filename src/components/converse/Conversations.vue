@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <div class="message" v-for="msg in messages" :key="msg.id">
+    <router-link class="message" :to="'/talk/' + msg.id" href="#" v-for="msg in messages" :key="msg.id">
       <img class="avatar" :src="msg.fromAvatar">
       <div class="desc">
         <div class="nickname">{{ msg.from }}</div>
         <div class="content">{{ msg.message }}</div>
       </div>
-    </div>
+    </router-link>
   </div>
 
 </template>
@@ -23,16 +23,19 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   overflow: auto;
 }
 .message {
-  background-color: #fff;
+  text-decoration: none;
+  background-color: $white;
+  color: darken($gray, 20%);
   flex-shrink: 0;
-  border-bottom: 2px solid #e6ecf0;
+  border-bottom: 2px solid $lightgray;
   padding: 10px 15px;
   display: flex;
 }
@@ -61,7 +64,7 @@ export default {
 }
 .message .desc .content {
   font-size: 0.8em;
-  color: #888;
+  color: lighten($gray, 10%);
 }
 </style>
 

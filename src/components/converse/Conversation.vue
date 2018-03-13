@@ -22,11 +22,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .session {
   padding: 15px;
   display: flex;
   width: 100%;
+  color: darken($gray, 20%);
   flex-direction: column-reverse;
   align-items: flex-start;
   overflow: auto;
@@ -46,7 +47,7 @@ export default {
   border-radius: 50%;
 }
 .message .bubble {
-  background-color: #E6ECF0;
+  background-color: $lightgray;
   word-break: break-all;
   padding: 10px;
   margin: 0 10px 0 10px;
@@ -63,23 +64,22 @@ export default {
   align-self: flex-end;
 }
 .no-message {
-  background-color: #E6ECF0;
+  background-color: $lightgray;
   border-radius: 15px;
   align-self: center;
   padding: 5px 10px;
-  color: #888;
   margin: auto 0;
 }
 
 @media (max-width: 1000px) {
   .session {
-    background-color: #E6ECF0;
+    background-color: $lightgray;
   }
   .message .bubble {
-    background-color: #FFF;
+    background-color: $white;
   }
   .no-message {
-    background-color: #FFF;
+    background-color: $white;
   }
 }
 

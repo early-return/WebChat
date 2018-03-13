@@ -28,7 +28,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 html,
 body,
 #app {
@@ -42,7 +42,7 @@ body,
 body {
   padding: 0;
   margin: 0;
-  background-color: #e6ecf0;
+  background-color: $lightgray;
 }
 
 .container {
@@ -54,9 +54,17 @@ body {
 main {
   flex-grow: 1;
   display: flex;
+  overflow: auto;
   justify-content: center;
 }
-
+*,
+html {
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
 </style>
 
 <style scoped>

@@ -41,7 +41,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
   display: flex;
   flex-direction: column;
@@ -57,8 +57,8 @@ export default {
   flex-grow: 1;
   overflow: auto;
   box-sizing: border-box;
-  background-color: #fff;
-  border-bottom: 1px solid #e6ecf0;
+  background-color: $white;
+  border-bottom: 1px solid $lightgray;
   justify-content: flex-start;
   padding: 10px;
 }

@@ -22,10 +22,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .input-bar {
   display: flex;
-  background-color: #E8F4F9;
+  background-color: $lightlightblue;
   padding: 10px;
   align-items: flex-end;
 }
@@ -37,24 +37,24 @@ textarea {
   font-size: 14px;
   resize: none;
   border-radius: 15px;
-  border: 1px solid #A5D5E8;
-  background-color: #FFF;
+  border: 1px solid lighten($lightblue, 10%);
+  background-color: $white;
   overflow: hidden;
   outline: none;
 }
 .button {
   display: block;
-  background-color: #4BACD2;
+  background-color: $lightblue;
   padding: 5px 10px;
   font-size: 14px;
   border: 0;
   text-decoration: none;
   border-radius: 15px;
-  color: #FFF;
+  color: $white;
   transform: background-color 0.3s;
 }
 .button:hover {
-  background-color: #1F98C7;
+  background-color: darken($lightblue, 10%);
 }
 </style>
 

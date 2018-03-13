@@ -12,8 +12,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Conversation',
-      component: Converse,
+      name: 'Chat',
+      component: Chat,
     },
     {
       path: '/chat',
@@ -29,6 +29,11 @@ export default new Router({
       path: '/status',
       name: 'Status',
       component: Status,
+    },
+    {
+      path: '/talk/:uid',
+      name: 'Conserse',
+      component: Converse,
     },
   ],
 });
