@@ -4,6 +4,7 @@ import Converse from '@/components/converse/Converse';
 import Chat from '@/components/Chat';
 import Group from '@/components/Group';
 import Status from '@/components/Status';
+import Checker from '@/components/Checker';
 
 
 Vue.use(Router);
@@ -12,8 +13,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Chat',
-      component: Chat,
+      name: 'Checker',
+      component: Checker,
     },
     {
       path: '/chat',

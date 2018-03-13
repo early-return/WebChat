@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <topbar class="topbar"></topbar>
+    <topbar :status="topBarStatus" class="topbar"></topbar>
     <main>
       <router-view></router-view>
     </main>
@@ -14,8 +14,21 @@ export default {
   name: 'app',
   data() {
     return {
-
     };
+  },
+  computed: {
+    topBarStatus() {
+      const type = this.$route.path === '/chat' || this.$route.path === '/group' || this.$route.path === '/status' ? 'menu' : 'title';
+      const active = this.$route.path.substring(1);
+      const title = '与好友的聊天';
+      return {
+        type,
+        active,
+        title,
+        backIcon: true,
+        canBack: true,
+      };
+    },
   },
   mounted() {
 
