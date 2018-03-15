@@ -10,6 +10,7 @@ import Checker from '@/components/Checker';
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -17,9 +18,10 @@ export default new Router({
       component: Checker,
     },
     {
-      path: '/chat',
+      path: '/chat/:sid',
       name: 'Chat',
       component: Chat,
+      props: true,
     },
     {
       path: '/group',
@@ -32,9 +34,10 @@ export default new Router({
       component: Status,
     },
     {
-      path: '/talk/:uid',
+      path: '/talk/:uid/:sid',
       name: 'Conserse',
       component: Converse,
+      props: true,
     },
   ],
 });

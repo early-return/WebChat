@@ -1,5 +1,5 @@
 <template>
-  <conversations class="conversations" :messages="messages"></conversations>
+  <conversations class="conversations" :messages="messages" :self-id="sid"></conversations>
 </template>
 
 <script>
@@ -12,13 +12,14 @@ export default {
       messages: [],
     };
   },
+  props: ['sid'],
   created() {
     this.fetchMessages();
   },
   methods: {
     fetchMessages() {
       const vm = this;
-      vm.$http.get('/api/test/messages')
+      vm.$http.get('/api/messages/recent')
         .then((response) => {
           vm.messages = response.data;
         });

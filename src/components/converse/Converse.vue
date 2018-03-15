@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <conversation class="conversation" :messages="messages"></conversation>
+      <conversation class="conversation" :messages="messages" :self-id="sid"></conversation>
       <input-bar class="input-bar" @post="sendMessage" button="发送"></input-bar>
     </div>
 </template>
@@ -12,6 +12,7 @@ import InputBar from '@/components/common/InputBar';
 
 export default {
   name: 'converse',
+  props: ['uid', 'sid'],
   data() {
     return {
       messages: [
@@ -20,7 +21,8 @@ export default {
   },
   created() {
     const vm = this;
-    vm.$http.get('/api/test/messages')
+    const id = vm.uid;
+    vm.$http.get(`/api/messages/${id}`)
       .then((response) => {
         vm.messages = response.data;
       });

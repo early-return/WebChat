@@ -1,14 +1,12 @@
+<template>
+  <div>加载中。。。</div>
+</template>
+
 <script>
 export default {
   data() {
     return {
-      hasLogin: true,
     };
-  },
-  created() {
-    if (this.hasLogin) {
-      this.$router.push('/chat');
-    }
   },
 };
 </script>

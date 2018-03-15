@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <router-link class="message" :to="'/talk/' + msg.id" href="#" v-for="msg in messages" :key="msg.id">
+    <router-link class="message" :to="'/talk/' + msg.fromId + '/' + selfId" href="#" v-for="msg in messages" :key="msg.fromId">
       <img class="avatar" :src="msg.fromAvatar">
       <div class="desc">
         <div class="nickname">{{ msg.from }}</div>
-        <div class="content">{{ msg.message }}</div>
+        <div class="content">{{ (msg.fromId === selfId ? '我' : msg.from) + ': ' + msg.message }}</div>
       </div>
     </router-link>
   </div>
@@ -14,7 +14,7 @@
 <script>
 export default {
   name: 'conversations',
-  props: ['messages'],
+  props: ['messages', 'selfId'],
   data() {
     return {
 

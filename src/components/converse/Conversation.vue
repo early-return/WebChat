@@ -1,6 +1,6 @@
 <template>
   <div class="session">
-    <div class="message" v-if="messages" :class="{ self: msg.name === 'Hehe' }" v-for="msg in messages" :key="msg.id">
+    <div class="message" v-if="messages" :class="{ self: msg.fromId == selfId }" v-for="msg in messages" :key="msg.id">
       <img class="avatar" :src="msg.fromAvatar">
       <p class="bubble">{{ msg.message }}</p>
     </div>
@@ -13,10 +13,9 @@
 <script>
 export default {
   name: 'conversation',
-  props: ['messages'],
+  props: ['messages', 'selfId'],
   data() {
     return {
-
     };
   },
 };

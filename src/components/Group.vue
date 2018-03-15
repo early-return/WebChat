@@ -18,7 +18,7 @@ export default {
   methods: {
     fetchMessages() {
       const vm = this;
-      vm.$http.get('/api/test/messages')
+      vm.$http.get('/api/messages/recent')
         .then((response) => {
           vm.messages = response.data;
         });

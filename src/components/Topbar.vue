@@ -2,7 +2,7 @@
   <header class="topbar">
     <div class="container">
       <div class="topbar-item navbar" v-if="status.type === 'menu'">
-        <router-link to="/chat" class="nav-item nav-item-chat" href="#">
+        <router-link :to="'/chat/' + selfId" class="nav-item nav-item-chat" href="#">
           <font-awesome-icon class="icon" :icon="chatIcon" />
           <span class="/text">聊天</span>
         </router-link>
@@ -46,7 +46,7 @@ export default {
       backIcon,
     };
   },
-  props: ['status'],
+  props: ['status', 'selfId'],
   computed: {
     chatIcon() {
       return this.status.type === 'menu' && this.status.active === 'chat' ? chatIconSolid : chatIconReg;

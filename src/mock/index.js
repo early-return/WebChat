@@ -2,20 +2,80 @@ const Mock = require('mockjs');
 
 const Random = Mock.Random;
 
-function messagesData() {
-  const messages = [];
+// 构造虚拟数据
 
-  for (let i = 0; i < 100; i += 1) {
-    const message = {
-      id: 100 - i,
-      from: Random.cname(),
-      fromAvatar: Random.dataImage('50x50', '图片'),
-      message: Random.csentence(),
-    };
-    messages.push(message);
-  }
+let index = 0;
 
-  return messages;
+// 构造虚拟消息的方法
+function generateMessage(from, to) {
+  index += 1;
+  return {
+    id: index,
+    fromId: from.id,
+    from: from.name,
+    fromAvatar: from.avatar,
+    toId: to.id,
+    to: to.name,
+    toAvatar: to.avatar,
+    message: Random.csentence(5, 50),
+    date: Random.datetime(),
+  };
 }
 
-Mock.mock('/api/test/messages', 'get', messagesData);
+// 用于存放构造的虚拟数据
+const data = {
+  self: {
+    id: 1,
+    name: Random.name,
+    avatar: Random.dataImage('50x50', '自己'),
+  },
+  users: [],
+  recentMessages: [],
+  allMessages: [],
+};
+
+
+// 构造用户数据
+for (let i = 0; i < 10; i += 1) {
+  const name = Random.cname();
+  const user = {
+    id: i + 2,
+    name,
+    avatar: Random.dataImage('50x50', name),
+  };
+  data.users.push(user);
+}
+
+// 构造消息数据
+for (let i = 0; i < data.users.length; i += 1) {
+  const messages = {
+    uid: data.users[i].id,
+    messages: [],
+  };
+  data.allMessages.push(messages);
+  for (let j = 0; j < 10; j += 1) {
+    const message = generateMessage(data.users[i], data.self);
+    data.allMessages[i].messages.push(message);
+  }
+  for (let j = 0; j < 10; j += 1) {
+    const message = generateMessage(data.self, data.users[i]);
+    data.allMessages[i].messages.push(message);
+  }
+
+  data.allMessages[i].messages.sort((msg1, msg2) => msg2.date - msg1.date);
+}
+
+for (let i = 0; i < data.allMessages.length; i += 1) {
+  data.recentMessages.push(data.allMessages[i].messages[0]);
+}
+data.recentMessages.sort((msg1, msg2) => msg2.date - msg1.date);
+
+Mock.mock('/api/messages/recent', 'get', () => data.recentMessages);
+Mock.mock(/\/api\/messages\/(\d*)/, 'get', () => {
+  console.log(data);
+  const result = data.allMessages[0].messages;
+  console.log(result);
+  return result;
+});
+Mock.mock('/api/self', 'get', () => data.self);
+
