@@ -74,7 +74,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: 1000px;
+  max-width: $content-max-width;
   margin: 0 auto;
 }
 

@@ -91,14 +91,15 @@ export default {
 
 <style scoped lang="scss">
 .topbar {
+  box-sizing: border-box;
   display: flex;
   width: 100%;
   justify-content: center;
   font-size: 14px;
   font-weight: bold;
-  color: #66757f;
-  background-color: #fff;
-  box-shadow: 0 0px 1px #888;
+  color: $gray;
+  background-color: $white;
+  box-shadow: 0 1px 1px darken($lightgray, 20%);
 }
 .topbar-item {
   display: flex;
