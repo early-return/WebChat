@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-      <conversation class="conversation" :messages="messages" :self-id="sid"></conversation>
+      <conversation class="conversation" :messages="messages"></conversation>
       <input-bar class="input-bar" @post="sendMessage" button="发送"></input-bar>
     </div>
 </template>
@@ -12,11 +12,10 @@ import InputBar from '@/components/common/InputBar';
 
 export default {
   name: 'converse',
-  props: ['uid', 'sid'],
+  props: ['uid'],
   data() {
     return {
-      messages: [
-      ],
+      messages: [],
     };
   },
   created() {

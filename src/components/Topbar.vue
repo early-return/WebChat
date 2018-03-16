@@ -2,7 +2,7 @@
   <header class="topbar">
     <div class="container">
       <div class="topbar-item navbar" v-if="status.type === 'menu'">
-        <router-link :to="'/chat/' + selfId" class="nav-item nav-item-chat" href="#">
+        <router-link to="/chat" class="nav-item nav-item-chat" href="#">
           <font-awesome-icon class="icon" :icon="chatIcon" />
           <span class="/text">聊天</span>
         </router-link>
@@ -39,14 +39,22 @@ import {
   faChevronLeft as backIcon,
 } from '@fortawesome/fontawesome-free-solid';
 
+import Bus from '@/bus';
+
 export default {
   name: 'topbar',
   data() {
     return {
+      status: {
+        type: 'menu',
+        active: 'chat',
+        title: 'Hello',
+        backIcon: true,
+        canBack: true,
+      },
       backIcon,
     };
   },
-  props: ['status', 'selfId'],
   computed: {
     chatIcon() {
       return this.status.type === 'menu' && this.status.active === 'chat' ? chatIconSolid : chatIconReg;
@@ -71,6 +79,11 @@ export default {
   },
   components: {
     FontAwesomeIcon,
+  },
+  mounted() {
+    Bus.$on(Bus.changeTopbarStatus, (status) => {
+      this.status = status;
+    });
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <conversations class="conversations" :messages="messages" :self-id="sid"></conversations>
+  <conversations class="conversations" :messages="messages"></conversations>
 </template>
 
 <script>
@@ -12,7 +12,6 @@ export default {
       messages: [],
     };
   },
-  props: ['sid'],
   created() {
     this.fetchMessages();
   },

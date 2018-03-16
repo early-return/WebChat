@@ -11,12 +11,19 @@
 </template>
 
 <script>
+import Bus from '@/bus';
+
 export default {
   name: 'conversation',
-  props: ['messages', 'selfId'],
+  props: ['messages'],
   data() {
     return {
     };
+  },
+  computed: {
+    selfId() {
+      return Bus.self ? Bus.self.id : 0;
+    },
   },
 };
 </script>

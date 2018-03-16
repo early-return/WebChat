@@ -72,9 +72,7 @@ data.recentMessages.sort((msg1, msg2) => msg2.date - msg1.date);
 
 Mock.mock('/api/messages/recent', 'get', () => data.recentMessages);
 Mock.mock(/\/api\/messages\/(\d*)/, 'get', () => {
-  console.log(data);
   const result = data.allMessages[0].messages;
-  console.log(result);
   return result;
 });
 Mock.mock('/api/self', 'get', () => data.self);

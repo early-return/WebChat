@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-link class="message" :to="'/talk/' + msg.fromId + '/' + selfId" href="#" v-for="msg in messages" :key="msg.fromId">
+    <router-link class="message" :to="'/talk/' + msg.fromId" href="#" v-for="msg in messages" :key="msg.fromId">
       <img class="avatar" :src="msg.fromAvatar">
       <div class="desc">
         <div class="nickname">{{ msg.from }}</div>
@@ -12,13 +12,18 @@
 </template>
 
 <script>
+import Bus from '@/bus';
+
 export default {
   name: 'conversations',
-  props: ['messages', 'selfId'],
+  props: ['messages'],
   data() {
     return {
-
+      selfId: 0,
     };
+  },
+  created() {
+    this.selfId = Bus.self ? Bus.self.id : 0;
   },
 };
 </script>

@@ -18,10 +18,9 @@ export default new Router({
       component: Checker,
     },
     {
-      path: '/chat/:sid',
+      path: '/chat',
       name: 'Chat',
       component: Chat,
-      props: true,
     },
     {
       path: '/group',
@@ -34,7 +33,7 @@ export default new Router({
       component: Status,
     },
     {
-      path: '/talk/:uid/:sid',
+      path: '/talk/:uid',
       name: 'Conserse',
       component: Converse,
       props: true,
