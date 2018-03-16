@@ -1,6 +1,6 @@
 <template>
   <div class="session">
-    <div class="message" v-if="messages" :class="{ self: msg.fromId == selfId }" v-for="msg in messages" :key="msg.id">
+    <div class="message" v-if="messages" :class="{ self: msg.fromId == selfId }" v-for="msg in messages" :title="msg.date" :key="msg.id">
       <img class="avatar" :src="msg.fromAvatar">
       <p class="bubble">{{ msg.message }}</p>
     </div>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Bus from '@/bus';
+import bus from '@/bus';
 
 export default {
   name: 'conversation',
@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     selfId() {
-      return Bus.self ? Bus.self.id : 0;
+      return bus.self ? bus.self.id : 0;
     },
   },
 };

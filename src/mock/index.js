@@ -62,7 +62,7 @@ for (let i = 0; i < data.users.length; i += 1) {
     data.allMessages[i].messages.push(message);
   }
 
-  data.allMessages[i].messages.sort((msg1, msg2) => msg2.date - msg1.date);
+  data.allMessages[i].messages.sort((msg1, msg2) => new Date(msg2.date) - new Date(msg1.date));
 }
 
 for (let i = 0; i < data.allMessages.length; i += 1) {

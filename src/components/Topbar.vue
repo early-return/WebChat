@@ -39,7 +39,7 @@ import {
   faChevronLeft as backIcon,
 } from '@fortawesome/fontawesome-free-solid';
 
-import Bus from '@/bus';
+import bus from '@/bus';
 
 export default {
   name: 'topbar',
@@ -81,7 +81,7 @@ export default {
     FontAwesomeIcon,
   },
   mounted() {
-    Bus.$on(Bus.changeTopbarStatus, (status) => {
+    bus.$on(bus.changeTopbarStatus, (status) => {
       this.status = status;
     });
   },
