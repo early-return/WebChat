@@ -5,6 +5,7 @@ import Chat from '@/components/Chat';
 import Group from '@/components/Group';
 import Status from '@/components/Status';
 import Checker from '@/components/Checker';
+import Login from '@/components/Login';
 
 
 Vue.use(Router);
@@ -16,6 +17,11 @@ export default new Router({
       path: '/',
       name: 'Checker',
       component: Checker,
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
     },
     {
       path: '/chat',

@@ -9,3 +9,9 @@ $white: #FFFFFF;
 
 $content-max-width: 1000px;
 $content-mobile-width: 1000px;
+
+@mixin circle-radius($fontSize: 14px) {
+  font-size: $fontSize;
+  border-radius: $fontSize;
+  padding: 5px 10px;
+}

@@ -1,6 +1,6 @@
 <template>
   <div class="session">
-    <div class="message" v-if="messages" :class="{ self: msg.fromId == selfId }" v-for="msg in messages" :title="msg.date" :key="msg.id">
+    <div class="message" v-if="messages" :class="{ self: msg.fromId == self.id }" v-for="msg in messages" :title="msg.date" :key="msg.id">
       <img class="avatar" :src="msg.fromAvatar">
       <p class="bubble">{{ msg.message }}</p>
     </div>
@@ -21,9 +21,17 @@ export default {
     };
   },
   computed: {
-    selfId() {
-      return bus.self ? bus.self.id : 0;
+    self() {
+      return bus.self ? bus.self : 0;
     },
+  },
+  mounted() {
+    bus.$emit(bus.changeTopbarStatus, {
+      type: 'title',
+      title: '与好友的聊天',
+      backIcon: true,
+      canBack: true,
+    });
   },
 };
 </script>

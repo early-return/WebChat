@@ -5,6 +5,13 @@ export default new Vue({
   data() {
     return {
       self: null,
+      topbarStatus: {
+        type: 'title',
+        active: '',
+        backIcon: false,
+        canBack: false,
+        title: '正在初始化',
+      },
       changeTopbarStatus: 'changeTopbarStatus',
       changeSelf: 'changeSelf',
     };
@@ -13,6 +20,10 @@ export default new Vue({
     const self = this;
     self.$on(this.changeSelf, (id) => {
       self.self = id;
+    });
+
+    self.$on(this.changeTopbarStatus, (status) => {
+      self.topbarStatus = status;
     });
   },
 });

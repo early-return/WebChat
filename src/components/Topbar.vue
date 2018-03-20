@@ -45,13 +45,6 @@ export default {
   name: 'topbar',
   data() {
     return {
-      status: {
-        type: 'menu',
-        active: 'chat',
-        title: 'Hello',
-        backIcon: true,
-        canBack: true,
-      },
       backIcon,
     };
   },
@@ -64,6 +57,9 @@ export default {
     },
     statusIcon() {
       return this.status.type === 'menu' && this.status.active === 'status' ? statusIconSolid : statusIconReg;
+    },
+    status() {
+      return bus.topbarStatus;
     },
   },
   methods: {
@@ -79,11 +75,6 @@ export default {
   },
   components: {
     FontAwesomeIcon,
-  },
-  mounted() {
-    bus.$on(bus.changeTopbarStatus, (status) => {
-      this.status = status;
-    });
   },
 };
 </script>

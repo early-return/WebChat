@@ -4,6 +4,7 @@
 
 <script>
 import Conversations from '@/components/converse/Conversations';
+import bus from '@/bus';
 
 export default {
   name: 'chat',
@@ -26,6 +27,12 @@ export default {
   },
   components: {
     Conversations,
+  },
+  mounted() {
+    bus.$emit(bus.changeTopbarStatus, {
+      type: 'menu',
+      active: 'chat',
+    });
   },
 };
 </script>

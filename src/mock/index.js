@@ -76,4 +76,12 @@ Mock.mock(/\/api\/messages\/(\d*)/, 'get', () => {
   return result;
 });
 Mock.mock('/api/self', 'get', () => data.self);
-
+Mock.mock(/\/api\/auth\/(.+)/, 'get', () => ({
+  status: 'exist',
+}));
+Mock.mock('/api/login', 'post', () => ({
+  user: data.self,
+}));
+Mock.mock('/api/register', 'post', () => ({
+  user: data.self,
+}));
