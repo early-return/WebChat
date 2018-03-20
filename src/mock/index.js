@@ -32,6 +32,7 @@ const data = {
   users: [],
   recentMessages: [],
   allMessages: [],
+  logged: false,
 };
 
 
@@ -75,13 +76,14 @@ Mock.mock(/\/api\/messages\/(\d*)/, 'get', () => {
   const result = data.allMessages[0].messages;
   return result;
 });
-Mock.mock('/api/self', 'get', () => data.self);
+Mock.mock('/api/self', 'get', () => (data.logged ? data.self : null));
 Mock.mock(/\/api\/auth\/(.+)/, 'get', () => ({
   status: 'exist',
 }));
-Mock.mock('/api/login', 'post', () => ({
-  user: data.self,
-}));
+Mock.mock('/api/login', 'post', () => {
+  data.logged = true;
+  return data.self;
+});
 Mock.mock('/api/register', 'post', () => ({
   user: data.self,
 }));

@@ -9,7 +9,7 @@
 
 <script>
 import Topbar from '@/components/Topbar';
-import Bus from '@/bus';
+import bus from '@/bus';
 
 export default {
   name: 'app',
@@ -22,8 +22,16 @@ export default {
     const vm = this;
     vm.$http('/api/self')
       .then((response) => {
-        Bus.$emit(Bus.changeSelf, response.data);
+        bus.$emit(bus.changeSelf, response.data);
       });
+
+    bus.$on(bus.changeSelf, (self) => {
+      if (!self) {
+        this.$router.push('/login');
+      } else {
+        this.$router.push('/chat');
+      }
+    });
   },
   computed: {
     topBarStatus() {
@@ -43,7 +51,7 @@ export default {
       const active = this.$route.path.split('/')[1];
       const type = active === 'chat' || active === 'group' || active === 'status' ? 'menu' : 'title';
       const title = '与好友的聊天';
-      Bus.$emit(Bus.changeTopbarStatus, {
+      bus.$emit(bus.changeTopbarStatus, {
         type,
         active,
         title,
