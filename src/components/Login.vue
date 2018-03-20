@@ -1,7 +1,7 @@
 <template>
 
   <div class="login-form">
-    <input type="text" placeholder="请输入您的邮箱" v-model="email">
+    <input type="email" placeholder="请输入您的邮箱" v-model="email">
     <input type="password" :class="{'no-display' : status !== 'login' && status !== 'register'}" placeholder="请输入您的密码" v-model="password">
     <input type="password" :class="{'no-display' : status !== 'register'}" placeholder="请再次输入您的密码" v-model="rePassword">
     <a class="btn" href="#" @click="action">{{ button }}</a>
