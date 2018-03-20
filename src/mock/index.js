@@ -82,7 +82,9 @@ Mock.mock(/\/api\/auth\/(.+)/, 'get', () => ({
 }));
 Mock.mock('/api/login', 'post', () => {
   data.logged = true;
-  return data.self;
+  return {
+    user: data.self,
+  };
 });
 Mock.mock('/api/register', 'post', () => ({
   user: data.self,
