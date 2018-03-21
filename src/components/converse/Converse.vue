@@ -8,6 +8,7 @@
 <script>
 import Conversation from '@/components/converse/Conversation';
 import InputBar from '@/components/common/InputBar';
+import bus from '@/bus';
 
 
 export default {
@@ -16,6 +17,7 @@ export default {
   data() {
     return {
       messages: [],
+      to: {},
     };
   },
   created() {
@@ -30,6 +32,9 @@ export default {
     sendMessage(payload) {
       this.messages.unshift({
         id: this.messages[this.messages.length - 1].id + 1,
+        fromId: bus.self.id,
+        from: bus.self.name,
+        fromAvatar: bus.self.avatar,
         name: 'Hehe',
         message: payload.text,
       });
