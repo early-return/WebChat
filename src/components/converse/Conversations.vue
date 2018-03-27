@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <router-link class="message" :to="'/talk/' + (msg.fromId === selfId ? msg.toId : msg.fromId)" href="#" v-for="msg in messages" :key="msg.id">
-      <img class="avatar" :src="msg.fromId === selfId ? msg.toAvatar : msg.fromAvatar">
+      <img class="avatar" :src="msg.fromId === self.id ? msg.toAvatar : msg.fromAvatar">
       <div class="desc">
-        <div class="nickname">{{ msg.fromId === selfId ? msg.to : msg.from }}</div>
-        <div class="content">{{ (msg.fromId === selfId ? '我' : msg.from) + ': ' + msg.message }}</div>
+        <div class="nickname">{{ msg.fromId === self.id ? msg.to : msg.from }}</div>
+        <div class="content">{{ (msg.fromId === self.id ? '我' : msg.from) + ': ' + msg.message }}</div>
       </div>
     </router-link>
   </div>
@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import bus from '@/bus';
 
 export default {
   name: 'conversations',
@@ -22,8 +21,8 @@ export default {
     };
   },
   computed: {
-    selfId() {
-      return bus.self ? bus.self.id : 0;
+    self() {
+      return this.$store.state.self;
     },
   },
 };

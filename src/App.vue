@@ -8,35 +8,29 @@
 </template>
 
 <script>
+import {
+  mapGetters,
+} from 'vuex';
 import Topbar from '@/components/Topbar';
-import bus from '@/bus';
+import {
+  INITIALIZE,
+} from '@/types/action-types';
 
 export default {
   name: 'app',
   data() {
     return {
-      self: null,
+
     };
   },
   created() {
     const vm = this;
-    vm.$http('/api/self')
-      .then((response) => {
-        bus.$emit(bus.changeSelf, response.data);
-      });
-
-    bus.$on(bus.changeSelf, (self) => {
-      if (!self) {
-        this.$router.push('/login');
-      } else {
-        this.$router.push('/chat');
-      }
-    });
+    vm.$store.dispatch(INITIALIZE);
   },
   computed: {
-    topBarStatus() {
-
-    },
+    ...mapGetters({
+      initialized: 'isInitialized',
+    }),
   },
   mounted() {
 
@@ -45,19 +39,19 @@ export default {
   },
   components: {
     Topbar,
+    self() {
+      return this.$store.state.self;
+    },
   },
   watch: {
-    $route() {
-      const active = this.$route.path.split('/')[1];
-      const type = active === 'chat' || active === 'group' || active === 'status' ? 'menu' : 'title';
-      const title = '与好友的聊天';
-      bus.$emit(bus.changeTopbarStatus, {
-        type,
-        active,
-        title,
-        backIcon: true,
-        canBack: true,
-      });
+    initialized() {
+      if (this.$store.getters.isInitialized) {
+        if (this.$store.getters.self) {
+          this.$router.push('/chat');
+        } else {
+          this.$router.push('/login');
+        }
+      }
     },
   },
 };

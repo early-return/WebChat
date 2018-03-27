@@ -4,7 +4,9 @@
 
 <script>
 import Conversations from '@/components/converse/Conversations';
-import bus from '@/bus';
+import {
+  TOPBAR_STATUS,
+} from '@/types/mutation-types';
 
 export default {
   name: 'chat',
@@ -29,7 +31,7 @@ export default {
     Conversations,
   },
   mounted() {
-    bus.$emit(bus.changeTopbarStatus, {
+    this.$store.commit(TOPBAR_STATUS, {
       type: 'menu',
       active: 'chat',
     });

@@ -11,7 +11,9 @@
 </template>
 
 <script>
-import bus from '@/bus';
+import {
+  TOPBAR_STATUS,
+} from '@/types/mutation-types';
 
 export default {
   name: 'conversation',
@@ -22,11 +24,11 @@ export default {
   },
   computed: {
     self() {
-      return bus.self ? bus.self : 0;
+      return this.$store.state.self;
     },
   },
   mounted() {
-    bus.$emit(bus.changeTopbarStatus, {
+    this.$store.commit(TOPBAR_STATUS, {
       type: 'title',
       title: '与好友的聊天',
       backIcon: true,

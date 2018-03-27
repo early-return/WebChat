@@ -39,7 +39,6 @@ import {
   faChevronLeft as backIcon,
 } from '@fortawesome/fontawesome-free-solid';
 
-import bus from '@/bus';
 
 export default {
   name: 'topbar',
@@ -59,7 +58,7 @@ export default {
       return this.status.type === 'menu' && this.status.active === 'status' ? statusIconSolid : statusIconReg;
     },
     status() {
-      return bus.topbarStatus;
+      return this.$store.state.topbarStatus;
     },
   },
   methods: {

@@ -15,6 +15,9 @@ import {
   INITIALIZE,
   FETCH_MESSAGES,
   FETCH_RECENT_MESSAGES,
+  LOGIN,
+  REGISTER,
+  CHECK_USER,
 } from '@/types/action-types';
 
 Vue.use(Vuex);
@@ -28,17 +31,19 @@ export default new Vuex.Store({
     messagesRecent: {},
   },
   getters: {
+    isInitialized: state => state.initialized,
+    self: state => state.self,
     getMessagesByUID: state => uid => state.messages[`${uid}`],
   },
   mutations: {
     [INITIALIZED](state, payload) {
       state.initialized = payload.status;
     },
-    [SELF](state, payload) {
-      state.self = payload.self;
+    [SELF](state, self) {
+      state.self = self;
     },
-    [TOPBAR_STATUS](state, payload) {
-      state.topbarStatus = payload.status;
+    [TOPBAR_STATUS](state, status) {
+      state.topbarStatus = status;
     },
     [MESSAGES_ALL](state, payload) {
       if (payload.replace) {
@@ -64,9 +69,15 @@ export default new Vuex.Store({
   },
   actions: {
     [INITIALIZE]({ commit }) {
-      commit(INITIALIZED, {
-        status: true,
-      });
+      axios.get('/api/auth')
+        .then((response) => {
+          if (response.data.user) {
+            commit(SELF, response.data.user);
+          }
+          commit(INITIALIZED, { status: true });
+        }).catch(() => {
+          commit(INITIALIZED, { status: true });
+        });
     },
     [FETCH_MESSAGES]({ commit }, payload) {
       axios.get(`/api/messages/${payload.uid}`)
@@ -82,6 +93,41 @@ export default new Vuex.Store({
           replace: true,
           messages: response.data,
         }));
+    },
+    [LOGIN]({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        axios.post('/api/login', params)
+          .then((response) => {
+            commit(SELF, response.data.user);
+            resolve(response.data.user);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    [REGISTER]({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        axios.post('/api/register', params)
+          .then((response) => {
+            commit(SELF, response.data.user);
+            resolve(response.data.user);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    [CHECK_USER](store, email) {
+      return new Promise((resolve, reject) => {
+        axios.get(`/api/check_user/${email}`)
+          .then((response) => {
+            resolve(response.data.status);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
     },
   },
 });

@@ -76,8 +76,8 @@ Mock.mock(/\/api\/messages\/(\d*)/, 'get', () => {
   const result = data.allMessages[0].messages;
   return result;
 });
-Mock.mock('/api/self', 'get', () => (data.logged ? data.self : null));
-Mock.mock(/\/api\/auth\/(.+)/, 'get', () => ({
+Mock.mock('/api/auth', 'get', () => ({ user: (data.logged ? data.self : null) }));
+Mock.mock(/\/api\/check_user\/(.+)/, 'get', () => ({
   status: 'exist',
 }));
 Mock.mock('/api/login', 'post', () => {

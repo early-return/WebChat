@@ -10,7 +10,14 @@
 </template>
 
 <script>
-import bus from '@/bus';
+import {
+  TOPBAR_STATUS,
+} from '@/types/mutation-types';
+import {
+  LOGIN,
+  REGISTER,
+  CHECK_USER,
+} from '@/types/action-types';
 
 export default {
   name: 'login',
@@ -24,7 +31,7 @@ export default {
     };
   },
   created() {
-    bus.$emit(bus.changeTopbarStatus, {
+    this.$store.commit(TOPBAR_STATUS, {
       type: 'title',
       active: 'chat',
       backIcon: false,
@@ -46,6 +53,9 @@ export default {
       }
       return button;
     },
+    self() {
+      return this.$store.state.self;
+    },
   },
   methods: {
     action() {
@@ -53,44 +63,43 @@ export default {
       const preStatus = vm.status;
       vm.status = 'waiting';
       if (preStatus === 'initial') {
-        vm.$http.get(`/api/auth/${vm.email}`)
-          .then((response) => {
-            if (response.data.status === 'exist') {
+        vm.$store.dispatch(CHECK_USER, vm.email)
+          .then((result) => {
+            if (result === 'exist') {
               vm.status = 'login';
             } else {
               vm.status = 'register';
             }
           });
       } else if (preStatus === 'login') {
-        vm.$http.post('/api/login', {
+        vm.$store.dispatch(LOGIN, {
           email: vm.email,
           password: vm.password,
-        }).then((response) => {
-          if (response.data.user) {
-            bus.$emit(bus.changeSelf, response.data.user);
-            vm.$router.push('/chat');
-          } else {
-            vm.emailerrorMessage = response.data.message;
-          }
+        }).then(() => {
+          vm.loginSuccess();
+        }).catch((err) => {
+          vm.errorMessage = err;
         });
       } else if (preStatus === 'register') {
         if (vm.password !== vm.rePassword) {
           vm.errorMessage = '两次密码输入不一致';
         } else {
-          vm.$http.post('/api/register', {
+          vm.$stoer.dispatch(REGISTER, {
             email: vm.email,
             password: vm.password,
-          }).then((response) => {
-            if (response.data.user) {
-              bus.$emit(bus.changeSelf, response.data.user);
-            } else {
-              vm.errorMessage = response.data.message;
-            }
+          }).then(() => {
+            vm.loginSuccess();
+          }).catch((err) => {
+            vm.errorMessage = err;
           });
         }
       }
     },
+    loginSuccess() {
+      this.$router.push('/chat');
+    },
   },
+
 };
 </script>
 <style lang="scss" scoped>
