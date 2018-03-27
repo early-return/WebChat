@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-link class="message" :to="'/talk/' + (msg.fromId === selfId ? msg.toId : msg.fromId)" href="#" v-for="msg in messages" :key="msg.id">
+    <router-link class="message" :to="'/talk/' + (msg.fromId === self.id ? msg.toId : msg.fromId)" href="#" v-for="msg in messages" :key="msg.id">
       <img class="avatar" :src="msg.fromId === self.id ? msg.toAvatar : msg.fromAvatar">
       <div class="desc">
         <div class="nickname">{{ msg.fromId === self.id ? msg.to : msg.from }}</div>
