@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <topbar class="topbar"></topbar>
     <main>
       <router-view></router-view>
     </main>
@@ -11,13 +10,9 @@
 import {
   mapGetters,
 } from 'vuex';
-import Topbar from '@/components/Topbar';
 import {
   INITIALIZE,
 } from '@/types/action-types';
-import {
-  TOPBAR_STATUS,
-} from '@/types/mutation-types';
 
 export default {
   name: 'app',
@@ -34,17 +29,14 @@ export default {
     ...mapGetters({
       initialized: 'isInitialized',
     }),
+    self() {
+      return this.$store.state.self;
+    },
   },
   mounted() {
 
   },
   methods: {
-  },
-  components: {
-    Topbar,
-    self() {
-      return this.$store.state.self;
-    },
   },
   watch: {
     // 监听是否已初始化及初始化后应跳转的页面
@@ -57,38 +49,14 @@ export default {
         }
       }
     },
-    // 监听路由变化以改变导航栏样式
-    $route(to) {
-      let active = '';
-      if (to.name === 'Chat') {
-        active = 'chat';
-      } else if (to.name === 'Group') {
-        active = 'group';
-      } else if (to.name === 'Status') {
-        active = 'status';
-      }
-      if (to.name === 'Chat' || to.name === 'Group' || to.name === 'Status') {
-        const status = {
-          type: 'menu',
-          active,
-        };
-        this.$store.commit(TOPBAR_STATUS, status);
-      }
-    },
   },
 };
 </script>
 
 <style lang="scss">
 html,
-body,
-#app {
-  height: 100%;
-}
-#app {
-  display: flex;
-  overflow: auto;
-  flex-direction: column;
+body {
+  height: 100vh;
 }
 body {
   padding: 0;
@@ -135,12 +103,6 @@ input[type="password"] {
   margin: 0 auto;
 }
 
-main {
-  flex-grow: 1;
-  display: flex;
-  overflow: auto;
-  justify-content: center;
-}
 *,
 html {
   -ms-overflow-style: none;

@@ -6,7 +6,6 @@ import axios from 'axios';
 import {
   SELF,
   INITIALIZED,
-  TOPBAR_STATUS,
   MESSAGES_ALL,
   MESSAGES_FOR_SOMEONE,
   MESSAGES_RECENT,
@@ -26,7 +25,6 @@ export default new Vuex.Store({
   state: {
     self: null,
     initialized: false,
-    topbarStatus: {},
     messages: {},
     messagesRecent: {},
   },
@@ -41,9 +39,6 @@ export default new Vuex.Store({
     },
     [SELF](state, self) {
       state.self = self;
-    },
-    [TOPBAR_STATUS](state, status) {
-      state.topbarStatus = status;
     },
     [MESSAGES_ALL](state, payload) {
       if (payload.replace) {

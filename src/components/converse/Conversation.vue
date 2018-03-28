@@ -11,9 +11,6 @@
 </template>
 
 <script>
-import {
-  TOPBAR_STATUS,
-} from '@/types/mutation-types';
 
 export default {
   name: 'conversation',
@@ -28,12 +25,6 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit(TOPBAR_STATUS, {
-      type: 'title',
-      title: '与好友的聊天',
-      backIcon: true,
-      canBack: true,
-    });
   },
 };
 </script>

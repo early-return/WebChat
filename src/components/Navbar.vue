@@ -1,7 +1,7 @@
 <template>
   <header class="topbar">
     <div class="container">
-      <div class="topbar-item navbar" v-if="status.type === 'menu'">
+      <div class="topbar-item navbar">
         <router-link to="/chat" replace class="nav-item nav-item-chat" href="#">
           <font-awesome-icon class="icon" :icon="chatIcon" />
           <span class="/text">聊天</span>
@@ -14,12 +14,6 @@
           <font-awesome-icon class="icon" :icon="statusIcon" />
           <span class="text">动态</span>
         </router-link>
-      </div>
-      <div class="topbar-item title-bar" v-if="status.type === 'title'">
-        <a class="nav-item" href="#" @click="goBack">
-          <font-awesome-icon v-if="status.backIcon" class="icon" :icon="backIcon" />
-          <span>{{ status.title }}</span>
-        </a>
       </div>
     </div>
   </header>
@@ -36,40 +30,25 @@ import {
   faCommentAlt as chatIconSolid,
   faComments as groupIconSolid,
   faStar as statusIconSolid,
-  faChevronLeft as backIcon,
 } from '@fortawesome/fontawesome-free-solid';
 
 
 export default {
-  name: 'topbar',
+  name: 'navbar',
   data() {
     return {
-      backIcon,
     };
   },
+  props: ['active'],
   computed: {
     chatIcon() {
-      return this.status.type === 'menu' && this.status.active === 'chat' ? chatIconSolid : chatIconReg;
+      return this.active === 'Chat' ? chatIconSolid : chatIconReg;
     },
     groupIcon() {
-      return this.status.type === 'menu' && this.status.active === 'group' ? groupIconSolid : groupIconReg;
+      return this.active === 'Group' ? groupIconSolid : groupIconReg;
     },
     statusIcon() {
-      return this.status.type === 'menu' && this.status.active === 'status' ? statusIconSolid : statusIconReg;
-    },
-    status() {
-      return this.$store.state.topbarStatus;
-    },
-  },
-  methods: {
-    goBack() {
-      if (this.status.canBack) {
-        if (window.history.length > 1) {
-          this.$router.go(-1);
-        } else {
-          this.$router.push('/');
-        }
-      }
+      return this.active === 'Status' ? statusIconSolid : statusIconReg;
     },
   },
   components: {
@@ -81,6 +60,7 @@ export default {
 
 <style scoped lang="scss">
 .topbar {
+  z-index: 1000;
   box-sizing: border-box;
   display: flex;
   width: 100%;
@@ -126,11 +106,5 @@ export default {
   border-bottom-color: $active;
 }
 
-.title-bar .nav-item {
-  padding-left: 10px;
-}
-.title-bar .nav-item .icon {
-  margin-right: 15px;
-}
 </style>
 

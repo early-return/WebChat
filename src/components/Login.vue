@@ -1,5 +1,8 @@
 <template>
 
+<div class="login">
+  <title-bar title="欢迎使用"></title-bar>
+
   <div class="login-form">
     <input type="email" placeholder="请输入您的邮箱" v-model="email">
     <input type="password" autofocus :class="{'no-display' : status !== 'login' && status !== 'register'}" placeholder="请输入您的密码" v-model="password">
@@ -7,17 +10,17 @@
     <a class="btn" href="#" @click="action">{{ button }}</a>
   </div>
 
+</div>
+
 </template>
 
 <script>
-import {
-  TOPBAR_STATUS,
-} from '@/types/mutation-types';
 import {
   LOGIN,
   REGISTER,
   CHECK_USER,
 } from '@/types/action-types';
+import TitleBar from '@/components/common/TitleBar';
 
 export default {
   name: 'login',
@@ -31,13 +34,6 @@ export default {
     };
   },
   created() {
-    this.$store.commit(TOPBAR_STATUS, {
-      type: 'title',
-      active: 'chat',
-      backIcon: false,
-      canBack: false,
-      title: '开始使用',
-    });
   },
   computed: {
     button() {
@@ -99,11 +95,21 @@ export default {
       this.$router.replace('/chat');
     },
   },
+  components: {
+    TitleBar,
+  },
 
 };
 </script>
 <style lang="scss" scoped>
+.login {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .login-form {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
