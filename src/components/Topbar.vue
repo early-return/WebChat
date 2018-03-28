@@ -2,15 +2,15 @@
   <header class="topbar">
     <div class="container">
       <div class="topbar-item navbar" v-if="status.type === 'menu'">
-        <router-link to="/chat" class="nav-item nav-item-chat" href="#">
+        <router-link to="/chat" replace class="nav-item nav-item-chat" href="#">
           <font-awesome-icon class="icon" :icon="chatIcon" />
           <span class="/text">聊天</span>
         </router-link>
-        <router-link to="/group" class="nav-item nav-item-group" href="#">
+        <router-link to="/group" replace class="nav-item nav-item-group" href="#">
           <font-awesome-icon class="icon" :icon="groupIcon" />
           <span class="text">群聊</span>
         </router-link>
-        <router-link to="/status" class="nav-item nav-item-status" href="#">
+        <router-link to="/status" replace class="nav-item nav-item-status" href="#">
           <font-awesome-icon class="icon" :icon="statusIcon" />
           <span class="text">动态</span>
         </router-link>

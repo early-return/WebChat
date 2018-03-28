@@ -96,7 +96,7 @@ export default {
       }
     },
     loginSuccess() {
-      this.$router.push('/chat');
+      this.$router.replace('/chat');
     },
   },
 

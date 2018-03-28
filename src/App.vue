@@ -15,6 +15,9 @@ import Topbar from '@/components/Topbar';
 import {
   INITIALIZE,
 } from '@/types/action-types';
+import {
+  TOPBAR_STATUS,
+} from '@/types/mutation-types';
 
 export default {
   name: 'app',
@@ -44,13 +47,32 @@ export default {
     },
   },
   watch: {
+    // 监听是否已初始化及初始化后应跳转的页面
     initialized() {
       if (this.$store.getters.isInitialized) {
         if (this.$store.getters.self) {
-          this.$router.push('/chat');
+          this.$router.replace('/chat');
         } else {
-          this.$router.push('/login');
+          this.$router.replace('/login');
         }
+      }
+    },
+    // 监听路由变化以改变导航栏样式
+    $route(to) {
+      let active = '';
+      if (to.name === 'Chat') {
+        active = 'chat';
+      } else if (to.name === 'Group') {
+        active = 'group';
+      } else if (to.name === 'Status') {
+        active = 'status';
+      }
+      if (to.name === 'Chat' || to.name === 'Group' || to.name === 'Status') {
+        const status = {
+          type: 'menu',
+          active,
+        };
+        this.$store.commit(TOPBAR_STATUS, status);
       }
     },
   },
