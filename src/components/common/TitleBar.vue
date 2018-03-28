@@ -57,6 +57,7 @@ export default {
   z-index: 1000;
   box-sizing: border-box;
   display: flex;
+  flex-direction: row;
   width: 100%;
   justify-content: center;
   font-size: 14px;
