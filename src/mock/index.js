@@ -32,7 +32,7 @@ const data = {
   users: [],
   recentMessages: [],
   allMessages: [],
-  logged: false,
+  logged: true,
 };
 
 

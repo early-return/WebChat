@@ -21,6 +21,10 @@ export default {
       to: {},
     };
   },
+  mounted() {
+    const conversation = document.querySelector('.conversation');
+    conversation.scrollTop = conversation.scrollHeight;
+  },
   computed: {
     self() {
       return this.$store.state.self;
@@ -74,14 +78,11 @@ export default {
 }
 .conversation {
   flex-grow: 1;
-  overflow: auto;
-  box-sizing: border-box;
   max-width: $content-max-width;
+  box-sizing: border-box;
+  width: 100%;
   background-color: $white;
   border-bottom: 1px solid $lightgray;
-  justify-content: flex-start;
-  overflow-y: auto;
-  padding: 10px;
 }
 </style>
 
