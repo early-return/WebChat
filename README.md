@@ -4,15 +4,15 @@
 
 ## 示例
 
+<img src="examples/mobile1.jpg" width="300"><img src="examples/mobile2.jpg" width="300">
+
 > 移动端截图
 
-![mobile1](examples/mobile1.jpg)
-![mobile2](examples/mobile2.jpg)
-
-> 桌面端截图
 
 ![desktop1](examples/desktop1.png)
 ![desktop2](examples/desktop2.png)
+
+> 桌面端截图
 
 ## 构建
 
@@ -32,3 +32,4 @@ npm run dev
 # 构建生产环境代码，存放于 dist 目录
 npm run build
 ```
+
