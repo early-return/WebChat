@@ -1,21 +1,34 @@
-# webchat
+# WebChat
 
-> A Vue.js project
+> 一个基于Web的IM应用
 
-## Build Setup
+## 示例
 
-``` bash
-# install dependencies
+> 移动端截图
+
+![mobile1](examples/mobile1.jpg)
+![mobile2](examples/mobile2.jpg)
+
+> 桌面端截图
+
+![desktop1](examples/desktop1.png)
+![desktop2](examples/desktop2.png)
+
+## 构建
+
+```bash
+# 从Github拉取到本地
+git clone git@github.com:zhiqing-lee/WebChat.git
+
+# 进入项目目录
+cd WebChat
+
+# 安装相关依赖
 npm install
 
-# serve with hot reload at localhost:8080
+# 以开发模式运行，将会在 localhost:8080 上启动一个带热启动的服务
 npm run dev
 
-# build for production with minification
+# 构建生产环境代码，存放于 dist 目录
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
