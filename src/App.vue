@@ -103,14 +103,19 @@ input[type="password"] {
   margin: 0 auto;
 }
 
-*,
-html {
-  -ms-overflow-style: none;
-  overflow: -moz-scrollbars-none;
+@media (min-width: 1000px) {
+  /* 设置滚动条的样式 */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  /* 滚动条滑块 */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.1);
+  }
 }
-*::-webkit-scrollbar {
-  display: none;
-}
+
+
+
 </style>
 
 <style scoped>
