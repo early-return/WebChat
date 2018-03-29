@@ -1,5 +1,5 @@
 <template>
-<div class="content">
+<div class="scroll-to-bottom">
   <div class="session">
     <div class="message" v-if="messages" :class="{ self: msg.fromId == self.id }" v-for="msg in messages" :title="msg.date" :key="msg.id">
       <img class="avatar" :src="msg.fromAvatar">
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     scrollToBottom() {
-      const content = document.querySelector('.content');
+      const content = document.querySelector('.scroll-to-bottom');
       content.scrollTop = content.scrollHeight;
     },
   },
@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.content {
+.scroll-to-bottom {
   overflow-y: auto;
 }
 .session {
