@@ -26,8 +26,13 @@ function generateMessage(from, to) {
 const data = {
   self: {
     id: 1,
-    name: Random.name,
+    name: Random.cname(),
     avatar: Random.dataImage('50x50', '自己'),
+    infoList: [
+      { title: '好友', content: '20', link: '#' },
+      { title: '动态', content: '10', link: '#' },
+      { title: '测试', content: 'haha', link: '#' },
+    ],
   },
   users: [],
   recentMessages: [],

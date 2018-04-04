@@ -33,7 +33,4 @@ export default {
 </script>
 
 <style scoped>
-.conversations {
-  padding: 10px 0;
-}
 </style>

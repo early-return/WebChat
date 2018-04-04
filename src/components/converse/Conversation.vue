@@ -90,7 +90,7 @@ export default {
   margin: auto 0;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: $content-mobile-width) {
   .session {
     background-color: $lightgray;
   }
