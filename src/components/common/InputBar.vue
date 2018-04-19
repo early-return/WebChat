@@ -1,6 +1,6 @@
 <template>
   <div class="input-bar">
-    <input type="text" placeholder="在此输入您想发送的信息" autocomplete="off" wrap="hard" v-model="text"><a class="btn" @click="post" href="#">{{ button }}</a>
+    <input type="text" placeholder="在此输入您想发送的信息" autocomplete="off" wrap="hard" v-model="text"><button class="btn" @click="post">{{ button }}</button>
   </div>
 </template>
 

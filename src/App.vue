@@ -71,6 +71,7 @@ body {
   color: $white;
   font-size: 14px;
   border-radius: 15px;
+  border: 0;
   text-decoration: none;
   transition: background-color 0.3s;
   letter-spacing: 2px;

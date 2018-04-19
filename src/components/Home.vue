@@ -3,15 +3,19 @@
     <navbar class="navbar" :active="active"></navbar>
     <main class="container">
       <div class="user-info">
-        <user-info class="user-info" :user="self"></user-info>
+        <user-info :user="self"></user-info>
       </div>
-      <router-view class="content"></router-view>
+      <div class="content-container">
+        <div class="content">
+          <router-view class="content-main"></router-view>
+        </div>
+      </div>
     </main>
   </div>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/common/Navbar';
 import UserInfo from '@/components/account/UserInfo';
 
 export default {
@@ -45,21 +49,35 @@ export default {
 .navbar {
   flex: 0 0 auto;
 }
-.content {
-  flex-grow: 1;
-  overflow-y: auto;
-}
+
 main.container {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  margin-top: 10px;
-}
+  align-items: stretch;
+  height: 100%;
 
-.user-info {
-  width: 250px;
-  margin-right: 10px;
-  flex: 0 0 auto;
+  .user-info {
+    width: 250px;
+    margin-right: $margin-size;
+    margin-top: $margin-size;
+    flex: 0 0 auto;
+  }
+
+  .content-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    position: relative;
+    flex: 1 0 auto;
+
+    .content {
+      position: absolute;
+      padding-top: $margin-size;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  }
 }
 
 @media (max-width: $content-mobile-width) {

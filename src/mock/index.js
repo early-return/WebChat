@@ -27,6 +27,7 @@ const data = {
   self: {
     id: 1,
     name: Random.cname(),
+    bgImage: Random.dataImage('250x100', '背景'),
     avatar: Random.dataImage('50x50', '自己'),
     infoList: [
       { title: '好友', content: '20', link: '#' },

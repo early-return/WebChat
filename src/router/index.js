@@ -3,9 +3,9 @@ import Router from 'vue-router';
 import store from '@/store';
 import Converse from '@/components/converse/Converse';
 import Home from '@/components/Home';
-import Chat from '@/components/Chat';
-import Group from '@/components/Group';
-import Status from '@/components/Status';
+import Chat from '@/components/home/Chat';
+import Group from '@/components/home/Group';
+import Status from '@/components/home/Status';
 import Waiting from '@/components/Waiting';
 import Login from '@/components/Login';
 

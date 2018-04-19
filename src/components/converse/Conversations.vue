@@ -1,13 +1,15 @@
 <template>
-  <div class="container">
-    <router-link class="message" :to="'/talk/' + (msg.fromId === self.id ? msg.toId : msg.fromId)" href="#" v-for="msg in messages" :key="msg.id">
-      <img class="avatar" :src="msg.fromId === self.id ? msg.toAvatar : msg.fromAvatar">
-      <div class="desc">
-        <div class="nickname">{{ msg.fromId === self.id ? msg.to : msg.from }}</div>
-        <div class="content">{{ (msg.fromId === self.id ? '我' : msg.from) + ': ' + msg.message }}</div>
-      </div>
-    </router-link>
-  </div>
+  <main class="messages-container">
+    <div class="messages">
+      <router-link class="message" :to="'/talk/' + (msg.fromId === self.id ? msg.toId : msg.fromId)" href="#" v-for="msg in messages" :key="msg.id">
+        <img class="avatar" :src="msg.fromId === self.id ? msg.toAvatar : msg.fromAvatar">
+        <div class="desc">
+          <div class="nickname">{{ msg.fromId === self.id ? msg.to : msg.from }}</div>
+          <div class="content">{{ (msg.fromId === self.id ? '我' : msg.from) + ': ' + msg.message }}</div>
+        </div>
+      </router-link>
+    </div>
+  </main>
 </template>
 
 <script>
@@ -28,13 +30,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.container {
-  display: flex;
-  flex-direction: column;
+main.messages-container {
   box-sizing: border-box;
   overflow: auto;
 }
+
+.messages {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+}
 .message {
+  box-sizing: border-box;
+  width: 100%;
   text-decoration: none;
   background-color: $white;
   color: darken($gray, 20%);
