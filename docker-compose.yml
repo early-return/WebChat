@@ -1,0 +1,10 @@
+version: "2.3"
+services:
+  fe:
+    image: nginx:alpine
+    volumes:
+      - ./dist:/usr/share/nginx/html
+    expose:
+      - "80"
+    ports:
+      - "80:80"
