@@ -6,15 +6,16 @@ import axios from 'axios';
 import {
   SELF,
   INITIALIZED,
-  MESSAGES_ALL,
-  MESSAGES_FOR_SOMEONE,
-  MESSAGES_RECENT,
+  FRIENDS,
+  MESSAGES,
+  MESSAGE,
 } from '@/types/mutation-types';
 import {
   INITIALIZE,
   FETCH_MESSAGES,
-  FETCH_RECENT_MESSAGES,
+  FETCH_FRIENDS,
   LOGIN,
+  SEND_MESSAGE,
   REGISTER,
   CHECK_USER,
 } from '@/types/action-types';
@@ -23,16 +24,29 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    // 当前已登录的用户信息
     self: null,
+
+    // 是否已完成初始化
     initialized: false,
-    messages: {},
-    messagesRecent: {},
+
+    // 缓存中的消息列表
+    allMessages: {},
+
+    // 好友列表
+    friends: [],
   },
+
   getters: {
     isInitialized: state => state.initialized,
     self: state => state.self,
-    getMessagesByUID: state => uid => state.messages[`${uid}`],
+    getMessagesByUID: state => uid => state.allMessages[`${uid}`],
+    getFriendByUID: state => uid => state.friends.find(user => user.id === Number(uid)),
+    recentMessages: state => Object.values(state.allMessages)
+      .map(messages => messages[0])
+      .sort((msg1, msg2) => msg1.date - msg2.date),
   },
+
   mutations: {
     [INITIALIZED](state, payload) {
       state.initialized = payload.status;
@@ -40,61 +54,74 @@ export default new Vuex.Store({
     [SELF](state, self) {
       state.self = self;
     },
-    [MESSAGES_ALL](state, payload) {
+    [FRIENDS](state, friends) {
+      state.friends = friends;
+    },
+    [MESSAGES](state, payload) {
       if (payload.replace) {
-        state.messages = payload.messages;
+        state.allMessages = payload.messages;
       } else {
-        Vue.set(state.messages, payload.uid, payload.messages);
+        Vue.set(state.allMessages, payload.uid, payload.messages);
       }
     },
-    [MESSAGES_FOR_SOMEONE](state, payload) {
-      if (payload.replace) {
-        state.messages[payload.uid] = payload.messages;
+    [MESSAGE](state, message) {
+      if (state.allMessages[message.toId]) {
+        state.allMessages[message.toId].unshift(message);
       } else {
-        state.messages[payload.uid].push(payload.messages);
-      }
-    },
-    [MESSAGES_RECENT](state, payload) {
-      if (payload.replace) {
-        state.messagesRecent = payload.messages;
-      } else {
-        state.messagesRecent.push(payload.messages);
+        state.allMessages[message.toId] = [message];
       }
     },
   },
+
   actions: {
-    [INITIALIZE]({ commit }) {
+    // 初始化应用
+    [INITIALIZE]({ commit, dispatch }) {
       axios.get('/api/auth')
         .then((response) => {
-          if (response.data.user) {
-            commit(SELF, response.data.user);
+          if (response.data.success) {
+            commit(SELF, response.data.data);
+            dispatch(FETCH_MESSAGES);
+            dispatch(FETCH_FRIENDS);
           }
           commit(INITIALIZED, { status: true });
         }).catch(() => {
           commit(INITIALIZED, { status: true });
         });
     },
-    [FETCH_MESSAGES]({ commit }, payload) {
-      axios.get(`/api/messages/${payload.uid}`)
-        .then(response => commit(MESSAGES_FOR_SOMEONE, {
-          replace: true,
-          uid: payload.uid,
-          messages: response.data,
-        }));
+
+    // 请求 API 相关 Action
+    [FETCH_MESSAGES]({ commit }) {
+      axios.get('/api/messages/all')
+        .then((response) => {
+          if (response.data.success) {
+            commit(MESSAGES, {
+              replace: true,
+              messages: response.data.data,
+            });
+          }
+        });
     },
-    [FETCH_RECENT_MESSAGES]({ commit }) {
-      axios.get('/api/recent')
-        .then(response => commit(MESSAGES_RECENT, {
-          replace: true,
-          messages: response.data,
-        }));
+    [FETCH_FRIENDS]({ commit }) {
+      axios.get('/api/friends')
+        .then((response) => {
+          if (response.data.success) {
+            commit(FRIENDS, response.data.data);
+          }
+        });
+    },
+    [SEND_MESSAGE]({ commit }, message) {
+      commit(MESSAGE, message);
     },
     [LOGIN]({ commit }, params) {
       return new Promise((resolve, reject) => {
         axios.post('/api/login', params)
           .then((response) => {
-            commit(SELF, response.data.user);
-            resolve(response.data.user);
+            if (response.data.success) {
+              commit(SELF, response.data.data);
+              resolve(response.data.data);
+            } else {
+              reject(new Error(response.data.messages));
+            }
           })
           .catch((err) => {
             reject(err);
@@ -105,8 +132,12 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios.post('/api/register', params)
           .then((response) => {
-            commit(SELF, response.data.user);
-            resolve(response.data.user);
+            if (response.data.success) {
+              commit(SELF, response.data.data);
+              resolve(response.data.data);
+            } else {
+              reject(new Error(response.data.messages));
+            }
           })
           .catch((err) => {
             reject(err);
@@ -117,7 +148,11 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios.get(`/api/check_user/${email}`)
           .then((response) => {
-            resolve(response.data.status);
+            if (response.data.success) {
+              resolve(response.data.status);
+            } else {
+              reject(new Error(response.data.message));
+            }
           })
           .catch((err) => {
             reject(err);

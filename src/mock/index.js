@@ -18,7 +18,7 @@ function generateMessage(from, to) {
     to: to.name,
     toAvatar: to.avatar,
     message: Random.csentence(5, 50),
-    date: Random.datetime(),
+    date: new Date(Random.datetime()),
   };
 }
 
@@ -36,8 +36,8 @@ const data = {
     ],
   },
   users: [],
-  recentMessages: [],
-  allMessages: [],
+  allMessages: {},
+  statusList: [],
   logged: true,
 };
 
@@ -55,43 +55,75 @@ for (let i = 0; i < 10; i += 1) {
 
 // 构造消息数据
 for (let i = 0; i < data.users.length; i += 1) {
-  const messages = {
-    uid: data.users[i].id,
-    messages: [],
-  };
-  data.allMessages.push(messages);
+  const messages = [];
   for (let j = 0; j < 10; j += 1) {
     const message = generateMessage(data.users[i], data.self);
-    data.allMessages[i].messages.push(message);
+    messages.push(message);
   }
   for (let j = 0; j < 10; j += 1) {
     const message = generateMessage(data.self, data.users[i]);
-    data.allMessages[i].messages.push(message);
+    messages.push(message);
   }
 
-  data.allMessages[i].messages.sort((msg1, msg2) => new Date(msg2.date) - new Date(msg1.date));
+  messages.sort((msg1, msg2) => new Date(msg1.date) - new Date(msg2.date));
+  data.allMessages[`${data.users[i].id}`] = messages;
 }
 
-for (let i = 0; i < data.allMessages.length; i += 1) {
-  data.recentMessages.push(data.allMessages[i].messages[0]);
-}
-data.recentMessages.sort((msg1, msg2) => msg2.date - msg1.date);
-
-Mock.mock('/api/messages/recent', 'get', () => data.recentMessages);
-Mock.mock(/\/api\/messages\/(\d*)/, 'get', () => {
-  const result = data.allMessages[0].messages;
-  return result;
-});
-Mock.mock('/api/auth', 'get', () => ({ user: (data.logged ? data.self : null) }));
-Mock.mock(/\/api\/check_user\/(.+)/, 'get', () => ({
-  status: 'exist',
-}));
-Mock.mock('/api/login', 'post', () => {
-  data.logged = true;
-  return {
-    user: data.self,
+// 构造用户动态
+for (let i = 0; i < data.users.length; i += 1) {
+  const status = {
+    uid: data.users[i].id,
+    uname: data.users[i].name,
+    content: Random.csentence(5, 50),
+    date: Random.datetime(),
+    like: Random.integer(),
   };
-});
+
+  data.statusList.push(status);
+}
+data.statusList.sort((status1, status2) => new Date(status1.date) - new Date(status2.date));
+
+Mock.mock('/api/messages/all', 'get', () => ({
+  success: true,
+  message: '',
+  data: data.allMessages,
+}));
+Mock.mock(/\/api\/messages\/(\d*)/, 'get', () => ({
+  success: true,
+  message: '',
+  data: data.allMessages[0].messages,
+}));
+Mock.mock('/api/auth', 'get', () => ({
+  success: true,
+  message: '',
+  data: (data.logged ? data.self : null) }));
+Mock.mock(/\/api\/check_user\/(.+)/, 'get', () => ({
+  success: true,
+  message: '',
+  data: 'exist',
+}));
+Mock.mock('/api/login', 'post', () => ({
+  success: true,
+  message: '',
+  data: data.self,
+}));
 Mock.mock('/api/register', 'post', () => ({
-  user: data.self,
+  success: true,
+  message: '',
+  data: data.self,
+}));
+Mock.mock('/api/status', 'get', () => ({
+  success: true,
+  message: '',
+  data: data.statusList,
+}));
+Mock.mock('/api/friends', 'get', () => ({
+  success: true,
+  message: '',
+  data: data.users,
+}));
+Mock.mock(/\/api\/profile\/(.+)/, 'get', () => ({
+  success: true,
+  message: '',
+  data: data.users[0],
 }));

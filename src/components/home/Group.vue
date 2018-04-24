@@ -9,19 +9,18 @@ export default {
   name: 'group',
   data() {
     return {
-      messages: [],
+
     };
   },
+  computed: {
+    messages() {
+      return this.$store.getters.recentMessages;
+    },
+  },
   created() {
-    this.fetchMessages();
   },
   methods: {
     fetchMessages() {
-      const vm = this;
-      vm.$http.get('/api/messages/recent')
-        .then((response) => {
-          vm.messages = response.data;
-        });
     },
   },
   components: {

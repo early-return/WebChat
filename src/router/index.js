@@ -15,16 +15,22 @@ Vue.use(Router);
 const router = new Router({
   mode: 'history',
   routes: [
+
+    // 等待应用完成初始化
     {
       path: '/',
       name: 'Checker',
       component: Waiting,
     },
+
+    // 登录相关路由
     {
       path: '/login',
       name: 'Login',
       component: Login,
     },
+
+    // 主界面相关路由：最近消息、最近群消息、最新动态等
     {
       path: '',
       name: 'Home',
@@ -48,12 +54,27 @@ const router = new Router({
         },
       ],
     },
+
+    // 聊天界面路由
     {
       path: '/talk/:uid',
       name: 'Conserse',
       component: Converse,
       props: true,
       meta: { requiresAuth: true },
+    },
+
+    // 个人信息界面相关路由
+    {
+      path: '/profile',
+      name: 'Profile',
+      meta: { requiresAuth: true },
+      // TODO: 添加路由对应组件
+    },
+    {
+      path: '/user/:uid',
+      name: 'OtherProfile',
+      // TODO: 添加路由对应组件
     },
   ],
 });

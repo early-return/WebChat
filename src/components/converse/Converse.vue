@@ -21,14 +21,16 @@ import InputBar from '@/components/common/InputBar';
 import TitleBar from '@/components/common/TitleBar';
 import UserInfo from '@/components/account/UserInfo';
 
+import {
+  SEND_MESSAGE,
+} from '@/types/action-types';
+
 
 export default {
   name: 'converse',
   props: ['uid'],
   data() {
     return {
-      messages: [],
-      to: {},
     };
   },
   mounted() {
@@ -39,19 +41,22 @@ export default {
     self() {
       return this.$store.state.self;
     },
+    messages() {
+      return this.$store.getters.getMessagesByUID(this.uid);
+    },
+    user() {
+      return this.$store.getters.getFriendByUID(this.uid);
+    },
   },
   created() {
-    const vm = this;
-    const id = vm.uid;
-    vm.$http.get(`/api/messages/${id}`)
-      .then((response) => {
-        vm.messages = response.data;
-      });
   },
   methods: {
     sendMessage(payload) {
-      this.messages.unshift({
+      this.$store.dispatch(SEND_MESSAGE, {
         id: this.messages[this.messages.length - 1].id + 1,
+        toId: this.uid,
+        to: this.user.name,
+        toAvatar: this.user.avatar,
         fromId: this.self.id,
         from: this.self.name,
         fromAvatar: this.self.avatar,

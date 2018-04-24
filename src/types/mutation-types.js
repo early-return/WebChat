@@ -1,8 +1,7 @@
 export const INITIALIZED = 'INITIALIZED';
-export const FRIENDS_LIST = 'FRIENDS_LIST';
+export const FRIENDS = 'FRIENDS';
 export const FRIENDS_RECENT = 'FRIENDS_RECENT';
-export const MESSAGES_ALL = 'MESSAGES_ALL';
-export const MESSAGES_RECENT = 'MESSAGES_RECENT';
+export const MESSAGES = 'MESSAGES';
 export const SELF = 'SELF';
-export const MESSAGES_FOR_SOMEONE = 'MESSAGES_FOR_SOMEONE';
+export const MESSAGE = 'MESSAGE';
 
