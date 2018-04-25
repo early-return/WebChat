@@ -1,10 +1,19 @@
 version: "2.3"
 services:
   fe:
-    image: nginx:alpine
+    build: .
     volumes:
       - ./dist:/usr/share/nginx/html
     expose:
       - "80"
     ports:
       - "80:80"
+
+  server:
+    build: ./server
+    volumes:
+      - ./server:/usr/src/app
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"

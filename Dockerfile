@@ -1,7 +1,3 @@
-FROM node:8-alpine
+FROM nginx:alpine
 
-VOLUME [ "/usr/src/app/" ]
-
-WORKDIR /usr/src/app/ 
-
-EXPOSE 8080
+ADD ./config/nginx.conf /etc/nginx/conf.d/default.conf

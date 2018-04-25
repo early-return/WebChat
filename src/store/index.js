@@ -1,8 +1,9 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import axios from 'axios';
+import io from 'socket.io-client';
 
-
+import config from '@/config';
 import {
   SELF,
   INITIALIZED,
@@ -22,7 +23,9 @@ import {
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const socket = io(config.socketAddress);
+
+const store = new Vuex.Store({
   state: {
     // 当前已登录的用户信息
     self: null,
@@ -35,6 +38,7 @@ export default new Vuex.Store({
 
     // 好友列表
     friends: [],
+
   },
 
   getters: {
@@ -109,8 +113,8 @@ export default new Vuex.Store({
           }
         });
     },
-    [SEND_MESSAGE]({ commit }, message) {
-      commit(MESSAGE, message);
+    [SEND_MESSAGE](_, message) {
+      socket.emit('message', { message });
     },
     [LOGIN]({ commit }, params) {
       return new Promise((resolve, reject) => {
@@ -144,7 +148,7 @@ export default new Vuex.Store({
           });
       });
     },
-    [CHECK_USER](store, email) {
+    [CHECK_USER](email) {
       return new Promise((resolve, reject) => {
         axios.get(`/api/check_user/${email}`)
           .then((response) => {
@@ -161,3 +165,9 @@ export default new Vuex.Store({
     },
   },
 });
+
+socket.on('message', (data) => {
+  store.commit(MESSAGE, data.message);
+});
+
+export default store;
