@@ -17,3 +17,17 @@ services:
       - "3000"
     ports:
       - "3000:3000"
+    links: 
+      - mongodb
+    depends_on: 
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    volumes: 
+      - mongodata:/data/db
+    ports: 
+      - "27017:27017"
+
+volumes: 
+  mongodata:

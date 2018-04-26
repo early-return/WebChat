@@ -47,7 +47,7 @@ blob@0.0.4:
   version "0.0.4"
   resolved "http://registry.npm.taobao.org/blob/download/blob-0.0.4.tgz#bcf13052ca54463f30f9fc7e95b9a47630a94921"
 
-body-parser@1.18.2:
+body-parser@1.18.2, body-parser@^1.18.2:
   version "1.18.2"
   resolved "http://registry.npm.taobao.org/body-parser/download/body-parser-1.18.2.tgz#87678a19d84b47d859b83199bd59bce222b10454"
   dependencies:
@@ -61,6 +61,10 @@ body-parser@1.18.2:
     qs "6.5.1"
     raw-body "2.3.2"
     type-is "~1.6.15"
+
+bson@~1.0.4:
+  version "1.0.6"
+  resolved "http://registry.npm.taobao.org/bson/download/bson-1.0.6.tgz#444db59ddd4c24f0cb063aabdc5c8c7b0ceca912"
 
 bytes@3.0.0:
   version "3.0.0"
@@ -304,6 +308,19 @@ mime@1.4.1:
   version "1.4.1"
   resolved "http://registry.npm.taobao.org/mime/download/mime-1.4.1.tgz#121f9ebc49e3766f311a76e1fa1c8003c4b03aa6"
 
+mongodb-core@3.0.7:
+  version "3.0.7"
+  resolved "http://registry.npm.taobao.org/mongodb-core/download/mongodb-core-3.0.7.tgz#a9941f14883a75768d554cef5fd67756a9cc0f25"
+  dependencies:
+    bson "~1.0.4"
+    require_optional "^1.0.1"
+
+mongodb@^3.0.7:
+  version "3.0.7"
+  resolved "http://registry.npm.taobao.org/mongodb/download/mongodb-3.0.7.tgz#cfcbaee992d78dabca67177f8f9db9cf13ac3a44"
+  dependencies:
+    mongodb-core "3.0.7"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/ms/download/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -366,9 +383,24 @@ raw-body@2.3.2:
     iconv-lite "0.4.19"
     unpipe "1.0.0"
 
+require_optional@^1.0.1:
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/require_optional/download/require_optional-1.0.1.tgz#4cf35a4247f64ca3df8c2ef208cc494b1ca8fc2e"
+  dependencies:
+    resolve-from "^2.0.0"
+    semver "^5.1.0"
+
+resolve-from@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/resolve-from/download/resolve-from-2.0.0.tgz#9480ab20e94ffa1d9e80a804c7ea147611966b57"
+
 safe-buffer@5.1.1, safe-buffer@~5.1.0:
   version "5.1.1"
   resolved "http://registry.npm.taobao.org/safe-buffer/download/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
+
+semver@^5.1.0:
+  version "5.5.0"
+  resolved "http://registry.npm.taobao.org/semver/download/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
 
 send@0.16.2:
   version "0.16.2"
