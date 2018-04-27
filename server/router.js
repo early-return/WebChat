@@ -9,9 +9,11 @@ router.get('/test', (req, res) => {
   });
 });
 
+router.get('/auth/:token', account.auth);
+router.get('/check/:email', account.checkEmail);
+router.get('/user/:uid', account.getProfile);
 router.post('/login', account.login);
 router.post('/register', account.register);
-router.get('/check/:email', account.checkEmail);
 router.post('/profile/update', account.updateProfile);
 
 module.exports = router;
