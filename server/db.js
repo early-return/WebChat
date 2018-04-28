@@ -84,12 +84,12 @@ module.exports = {
   },
 
   // 好友相关
-  async addFriends(fromUid, toUid) {
+  async addFriend(fromUid, toUid) {
     const db = await getDB(COL_FRIENDS);
 
     const res = await db.col.insertOne({
       fromUid: new ObjectID(fromUid),
-      to: new ObjectID(toUid),
+      toUid: new ObjectID(toUid),
     });
     db.client.close();
     return res;
@@ -98,9 +98,9 @@ module.exports = {
   async findAllFriends(uid) {
     let db = await getDB(COL_FRIENDS);
 
-    const ids = await db.col.find({ fromUid: new ObjectID(uid) })
-      .toArray()
-      .map(friend => friend.toUid);
+    const friends = await db.col.find({ fromUid: new ObjectID(uid) }).toArray();
+    const ids = friends.map(friend => friend.toUid);
+    db.client.close();
 
     db = await getDB(COL_USERS);
     const res = await db.col.find(
