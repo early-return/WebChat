@@ -80,7 +80,7 @@ export default {
         if (vm.password !== vm.rePassword) {
           vm.errorMessage = '两次密码输入不一致';
         } else {
-          vm.$stoer.dispatch(REGISTER, {
+          vm.$store.dispatch(REGISTER, {
             email: vm.email,
             password: vm.password,
           }).then(() => {

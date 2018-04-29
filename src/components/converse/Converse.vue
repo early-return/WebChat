@@ -1,9 +1,9 @@
 <template>
   <div class="converse">
-    <title-bar class="title-bar" title="与好友的聊天" canBack></title-bar>
+    <title-bar class="title-bar" :title="`与 ${friend.name} 的聊天`" canBack></title-bar>
     <main class="container">
       <aside class="user-info">
-        <user-info :user="self"></user-info>
+        <user-info :user="friend"></user-info>
       </aside>
       <main class="content-container">
         <div class="content">
@@ -41,11 +41,11 @@ export default {
     self() {
       return this.$store.state.self;
     },
+    friend() {
+      return this.$store.getters.getFriendByUID(this.uid);
+    },
     messages() {
       return this.$store.getters.getMessagesByUID(this.uid);
-    },
-    user() {
-      return this.$store.getters.getFriendByUID(this.uid);
     },
   },
   created() {
@@ -53,14 +53,8 @@ export default {
   methods: {
     sendMessage(payload) {
       this.$store.dispatch(SEND_MESSAGE, {
-        id: this.messages[this.messages.length - 1].id + 1,
         toId: this.uid,
-        to: this.user.name,
-        toAvatar: this.user.avatar,
         fromId: this.self.id,
-        from: this.self.name,
-        fromAvatar: this.self.avatar,
-        name: 'Hehe',
         message: payload.text,
       });
     },
@@ -81,7 +75,7 @@ main.container {
   flex-direction: row;
 
   .user-info {
-    flex: 0 0 auto;
+    flex: 0 0 250px;
     margin-top: $margin-size;
     margin-right: $margin-size;
   }

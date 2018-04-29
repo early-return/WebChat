@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 
 import config from '@/config';
 import {
+  TOKEN,
   SELF,
   INITIALIZED,
   FRIENDS,
@@ -25,8 +26,13 @@ Vue.use(Vuex);
 
 const socket = io(config.socketAddress);
 
+const baseUrl = `${config.serverAddress}/api`;
+
 const store = new Vuex.Store({
   state: {
+    // 用户登录后取得的令牌
+    token: 'a',
+
     // 当前已登录的用户信息
     self: null,
 
@@ -45,7 +51,7 @@ const store = new Vuex.Store({
     isInitialized: state => state.initialized,
     self: state => state.self,
     getMessagesByUID: state => uid => state.allMessages[`${uid}`],
-    getFriendByUID: state => uid => state.friends.find(user => user.id === Number(uid)),
+    getFriendByUID: state => uid => state.friends.find(user => user._id === uid),
     recentMessages: state => Object.values(state.allMessages)
       .map(messages => messages[0])
       .sort((msg1, msg2) => msg1.date - msg2.date),
@@ -54,6 +60,9 @@ const store = new Vuex.Store({
   mutations: {
     [INITIALIZED](state, payload) {
       state.initialized = payload.status;
+    },
+    [TOKEN](state, token) {
+      state.token = token;
     },
     [SELF](state, self) {
       state.self = self;
@@ -79,13 +88,13 @@ const store = new Vuex.Store({
 
   actions: {
     // 初始化应用
-    [INITIALIZE]({ commit, dispatch }) {
-      axios.get('/api/auth')
+    [INITIALIZE]({ state, commit, dispatch }) {
+      axios.get(`${baseUrl}/auth/${state.token}`)
         .then((response) => {
           if (response.data.success) {
             commit(SELF, response.data.data);
-            dispatch(FETCH_MESSAGES);
             dispatch(FETCH_FRIENDS);
+            dispatch(FETCH_MESSAGES);
           }
           commit(INITIALIZED, { status: true });
         }).catch(() => {
@@ -94,8 +103,8 @@ const store = new Vuex.Store({
     },
 
     // 请求 API 相关 Action
-    [FETCH_MESSAGES]({ commit }) {
-      axios.get('/api/messages/all')
+    [FETCH_MESSAGES]({ state, commit }) {
+      axios.get(`${baseUrl}/messages/${state.self._id}/${state.token}`)
         .then((response) => {
           if (response.data.success) {
             commit(MESSAGES, {
@@ -105,8 +114,8 @@ const store = new Vuex.Store({
           }
         });
     },
-    [FETCH_FRIENDS]({ commit }) {
-      axios.get('/api/friends')
+    [FETCH_FRIENDS]({ state, commit }) {
+      axios.get(`${baseUrl}/friends/${state.self._id}/${state.token}`)
         .then((response) => {
           if (response.data.success) {
             commit(FRIENDS, response.data.data);
@@ -116,13 +125,16 @@ const store = new Vuex.Store({
     [SEND_MESSAGE](_, message) {
       socket.emit('message', { message });
     },
-    [LOGIN]({ commit }, params) {
+    [LOGIN]({ commit, dispatch }, params) {
       return new Promise((resolve, reject) => {
-        axios.post('/api/login', params)
+        axios.post(`${baseUrl}/login`, params)
           .then((response) => {
             if (response.data.success) {
-              commit(SELF, response.data.data);
-              resolve(response.data.data);
+              commit(TOKEN, response.data.data.token);
+              commit(SELF, response.data.data.user);
+              dispatch(FETCH_FRIENDS);
+              dispatch(FETCH_MESSAGES);
+              resolve(response.data.data.user);
             } else {
               reject(new Error(response.data.messages));
             }
@@ -134,11 +146,12 @@ const store = new Vuex.Store({
     },
     [REGISTER]({ commit }, params) {
       return new Promise((resolve, reject) => {
-        axios.post('/api/register', params)
+        axios.post(`${baseUrl}/register`, params)
           .then((response) => {
             if (response.data.success) {
-              commit(SELF, response.data.data);
-              resolve(response.data.data);
+              commit(TOKEN, response.data.data.token);
+              commit(SELF, response.data.data.user);
+              resolve(response.data.data.user);
             } else {
               reject(new Error(response.data.messages));
             }
@@ -148,12 +161,12 @@ const store = new Vuex.Store({
           });
       });
     },
-    [CHECK_USER](email) {
+    [CHECK_USER](_, email) {
       return new Promise((resolve, reject) => {
-        axios.get(`/api/check_user/${email}`)
+        axios.get(`${baseUrl}/check/${email}`)
           .then((response) => {
             if (response.data.success) {
-              resolve(response.data.status);
+              resolve(response.data.data.status);
             } else {
               reject(new Error(response.data.message));
             }

@@ -19,7 +19,7 @@ module.exports = {
     };
   },
   randomAvatar() {
-    return `/img/avatar/${Math.floor((Math.random() * 15) + 1)}.png`;
+    return `/static/img/avatar/${Math.floor((Math.random() * 15) + 1)}.png`;
   },
   async auth(token, uid) {
     const doc = await db.findToken(token);

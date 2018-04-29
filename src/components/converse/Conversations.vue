@@ -1,11 +1,11 @@
 <template>
   <main class="messages-container">
     <div class="messages">
-      <router-link class="message" :to="'/talk/' + (msg.fromId === self.id ? msg.toId : msg.fromId)" href="#" v-for="msg in messages" :key="msg.id">
-        <img class="avatar" :src="msg.fromId === self.id ? msg.toAvatar : msg.fromAvatar">
+      <router-link class="message" :to="`/talk/${msg.session}`" href="#" v-for="msg in messages" :key="msg._id">
+        <img class="avatar" :src="getAvatar(msg.session)">
         <div class="desc">
-          <div class="nickname">{{ msg.fromId === self.id ? msg.to : msg.from }}</div>
-          <div class="content">{{ (msg.fromId === self.id ? '我' : msg.from) + ': ' + msg.message }}</div>
+          <div class="nickname">{{ getName(msg.session) }}</div>
+          <div class="content">{{ `${getName(msg.fromId)}: ${msg.message}` }}</div>
         </div>
       </router-link>
     </div>
@@ -24,6 +24,18 @@ export default {
   computed: {
     self() {
       return this.$store.state.self;
+    },
+  },
+  methods: {
+    getAvatar(id) {
+      const friend = this.$store.getters.getFriendByUID(id);
+      return friend.avatar;
+    },
+    getName(id) {
+      if (id === this.self._id) {
+        return '我';
+      }
+      return this.$store.getters.getFriendByUID(id).name;
     },
   },
 };

@@ -28,10 +28,11 @@ const processRegister = async (user) => {
 
 const processCheckEmail = async (email) => {
   const users = await db.findUser({ email });
-  if (users.length < 1) {
-    throw new Error('该邮箱地址还为注册！');
+  const status = { status: 'notexist' };
+  if (users.length > 0) {
+    status.status = 'exist';
   }
-  return util.resp(true, '该邮箱已注册！', null);
+  return util.resp(true, '该邮箱已注册！', status);
 };
 
 const processUpdateUser = async (user, token) => {
