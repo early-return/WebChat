@@ -23,6 +23,6 @@ module.exports = {
   addFriend(req, res) {
     processAddFriend(req.body.token, req.body.fromId, req.body.toId)
       .then(data => res.json(data))
-      .catch(err => res.json(false, err.message, err.toString()));
+      .catch(err => res.json(util.resp(false, err.message, err.toString())));
   },
 };

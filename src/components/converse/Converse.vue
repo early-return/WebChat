@@ -42,7 +42,11 @@ export default {
       return this.$store.state.self;
     },
     friend() {
-      return this.$store.getters.getFriendByUID(this.uid);
+      let friend = this.$store.getters.getFriendByUID(this.uid);
+      if (!friend) {
+        friend = { _id: this.uid, name: '陌生人', avatar: '/static/avatar/unknown.png' };
+      }
+      return friend;
     },
     messages() {
       return this.$store.getters.getMessagesByUID(this.uid);
@@ -54,7 +58,7 @@ export default {
     sendMessage(payload) {
       this.$store.dispatch(SEND_MESSAGE, {
         toId: this.uid,
-        fromId: this.self.id,
+        fromId: this.self._id,
         message: payload.text,
       });
     },

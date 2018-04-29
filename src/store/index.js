@@ -78,10 +78,11 @@ const store = new Vuex.Store({
       }
     },
     [MESSAGE](state, message) {
-      if (state.allMessages[message.toId]) {
-        state.allMessages[message.toId].unshift(message);
+      console.log(message.session);
+      if (state.allMessages[message.session]) {
+        state.allMessages[message.session].unshift(message);
       } else {
-        state.allMessages[message.toId] = [message];
+        state.allMessages[message.session] = [message];
       }
     },
   },
@@ -93,6 +94,7 @@ const store = new Vuex.Store({
         .then((response) => {
           if (response.data.success) {
             commit(SELF, response.data.data);
+            socket.emit('auth', { token: state.token, uid: state.self._id });
             dispatch(FETCH_FRIENDS);
             dispatch(FETCH_MESSAGES);
           }
@@ -122,8 +124,8 @@ const store = new Vuex.Store({
           }
         });
     },
-    [SEND_MESSAGE](_, message) {
-      socket.emit('message', { message });
+    [SEND_MESSAGE]({ state }, message) {
+      socket.emit('message', { token: state.token, message });
     },
     [LOGIN]({ commit, dispatch }, params) {
       return new Promise((resolve, reject) => {
@@ -132,8 +134,7 @@ const store = new Vuex.Store({
             if (response.data.success) {
               commit(TOKEN, response.data.data.token);
               commit(SELF, response.data.data.user);
-              dispatch(FETCH_FRIENDS);
-              dispatch(FETCH_MESSAGES);
+              dispatch(INITIALIZE);
               resolve(response.data.data.user);
             } else {
               reject(new Error(response.data.messages));
@@ -144,13 +145,14 @@ const store = new Vuex.Store({
           });
       });
     },
-    [REGISTER]({ commit }, params) {
+    [REGISTER]({ commit, dispatch }, params) {
       return new Promise((resolve, reject) => {
         axios.post(`${baseUrl}/register`, params)
           .then((response) => {
             if (response.data.success) {
               commit(TOKEN, response.data.data.token);
               commit(SELF, response.data.data.user);
+              dispatch(INITIALIZE);
               resolve(response.data.data.user);
             } else {
               reject(new Error(response.data.messages));
@@ -180,7 +182,8 @@ const store = new Vuex.Store({
 });
 
 socket.on('message', (data) => {
-  store.commit(MESSAGE, data.message);
+  console.log(data);
+  store.commit(MESSAGE, data);
 });
 
 export default store;

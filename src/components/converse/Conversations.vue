@@ -29,13 +29,20 @@ export default {
   methods: {
     getAvatar(id) {
       const friend = this.$store.getters.getFriendByUID(id);
+      if (!friend) {
+        return '/static/avatar/unknown.png';
+      }
       return friend.avatar;
     },
     getName(id) {
       if (id === this.self._id) {
         return '我';
       }
-      return this.$store.getters.getFriendByUID(id).name;
+      const friend = this.$store.getters.getFriendByUID(id);
+      if (!friend) {
+        return '陌生人';
+      }
+      return friend.name;
     },
   },
 };

@@ -140,20 +140,15 @@ module.exports = {
   },
 
   // 消息相关
-  async addMessage(fromId, toId, message) {
-    const msg = {
-      session: new ObjectID(toId),
-      fromId: new ObjectID(fromId),
-      toId: new ObjectID(toId),
-      message,
-      date: new Date(),
-    };
+  async addMessage(msg) {
+    msg.session = new ObjectID(msg.toId);
+    msg.date = new Date();
 
-    let db = await getDB(`${COL_MESSAGES}_${fromId}`);
+    let db = await getDB(`${COL_MESSAGES}_${msg.fromId}`);
     const res = await db.col.insertOne(msg);
     db.client.close();
-    db = await getDB(`${COL_MESSAGES}_${toId}`);
-    msg.session = new ObjectID(fromId);
+    db = await getDB(`${COL_MESSAGES}_${msg.toId}`);
+    msg.session = new ObjectID(msg.fromId);
     await db.col.insertOne(msg);
     db.client.close();
     return res;
