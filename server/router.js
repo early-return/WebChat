@@ -15,6 +15,7 @@ router.get('/auth/:token', account.auth);
 router.get('/check/:email', account.checkEmail);
 router.get('/user/:uid', account.getProfile);
 router.post('/login', account.login);
+router.post('/logout', account.logout);
 router.post('/register', account.register);
 router.post('/profile/update', account.updateProfile);
 

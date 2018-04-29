@@ -14,6 +14,12 @@ const processLogin = async (user) => {
   return util.resp(true, '', { token, user: doc[0] });
 };
 
+const processLogout = async (uid, token) => {
+  const res = await util.auth(token, uid);
+  await db.removeToken({ _id: res._id });
+  return util.resp(true, '', null);
+};
+
 const processRegister = async (user) => {
   const users = await db.findUser({ email: user.email });
   if (users.length > 0) {
@@ -73,6 +79,12 @@ module.exports = {
     const user = req.body;
     user.password = util.genpass(user.password);
     processLogin(user)
+      .then(data => res.json(data))
+      .catch(err => res.json(util.resp(false, err.message, err.toString())));
+  },
+
+  logout(req, res) {
+    processLogout(req.body.token, req.body.uid)
       .then(data => res.json(data))
       .catch(err => res.json(util.resp(false, err.message, err.toString())));
   },

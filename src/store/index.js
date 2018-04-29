@@ -78,7 +78,6 @@ const store = new Vuex.Store({
       }
     },
     [MESSAGE](state, message) {
-      console.log(message.session);
       if (state.allMessages[message.session]) {
         state.allMessages[message.session].unshift(message);
       } else {
@@ -90,6 +89,9 @@ const store = new Vuex.Store({
   actions: {
     // 初始化应用
     [INITIALIZE]({ state, commit, dispatch }) {
+      if (localStorage.getItem('token')) {
+        commit(TOKEN, localStorage.getItem('token'));
+      }
       axios.get(`${baseUrl}/auth/${state.token}`)
         .then((response) => {
           if (response.data.success) {
@@ -134,6 +136,7 @@ const store = new Vuex.Store({
             if (response.data.success) {
               commit(TOKEN, response.data.data.token);
               commit(SELF, response.data.data.user);
+              localStorage.setItem('token', response.data.data.token);
               dispatch(INITIALIZE);
               resolve(response.data.data.user);
             } else {
@@ -152,6 +155,7 @@ const store = new Vuex.Store({
             if (response.data.success) {
               commit(TOKEN, response.data.data.token);
               commit(SELF, response.data.data.user);
+              localStorage.setItem('token', response.data.data.token);
               dispatch(INITIALIZE);
               resolve(response.data.data.user);
             } else {
@@ -182,7 +186,6 @@ const store = new Vuex.Store({
 });
 
 socket.on('message', (data) => {
-  console.log(data);
   store.commit(MESSAGE, data);
 });
 
