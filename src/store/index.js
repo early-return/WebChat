@@ -61,7 +61,7 @@ const store = new Vuex.Store({
     noticeType: 'info',
 
     // 操作盒子相关
-    operationBoxShowing: true,
+    operationBoxShowing: false,
     operationBoxPayload: { title: 'this is title' },
 
   },

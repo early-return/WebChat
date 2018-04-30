@@ -22,9 +22,9 @@
       <div class="menu">
         <font-awesome-icon class="menu-icon" @click="switchMenu" :icon="menuIcon" />
         <div class="menu-content" v-if="showingMenu">
-          <router-link to="/friend/add" class="menu-item">添加好友</router-link>
-          <router-link to="/chat" class="menu-item">加入群组</router-link>
-          <router-link to="/chat" class="menu-item">创建群组</router-link>
+          <div @click="addFriend" class="menu-item">添加好友</div>
+          <div @click="addGroup" class="menu-item">加入群组</div>
+          <div @click="createGroup" class="menu-item">创建群组</div>
           <div @click="logout" class="menu-item">登出账号</div>
         </div>
       </div>
@@ -50,6 +50,7 @@ import {
 
 import {
   LOGOUT,
+  SHOW_OPERATION_BOX,
 } from '@/types/action-types';
 
 
@@ -85,6 +86,33 @@ export default {
     logout() {
       this.$store.dispatch(LOGOUT)
         .then(() => this.$router.replace('/login'));
+    },
+    addFriend() {
+      this.$store.dispatch(SHOW_OPERATION_BOX, {
+        title: '请输入想要添加的好友的邮箱',
+        callback: () => {
+
+        },
+      });
+      this.switchMenu();
+    },
+    addGroup() {
+      this.$store.dispatch(SHOW_OPERATION_BOX, {
+        title: '请输入想要加入的群组名称',
+        callback: () => {
+
+        },
+      });
+      this.switchMenu();
+    },
+    createGroup() {
+      this.$store.dispatch(SHOW_OPERATION_BOX, {
+        title: '请输入想要创建的群组名称',
+        callback: () => {
+
+        },
+      });
+      this.switchMenu();
     },
   },
   components: {

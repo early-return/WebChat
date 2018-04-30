@@ -62,7 +62,7 @@ export default {
     box-shadow: 2px 2px 2px rgba($color: #888, $alpha: 0.8);
 
     header {
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
 
@@ -70,10 +70,23 @@ export default {
         color: $blue;
         font-weight: bold;
         font-size: 20px;
+        margin-right: 10px;
       }
 
-      .close-btn:hover {
-        cursor: pointer;
+      .close-btn {
+        padding: 5px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    main {
+
+      input {
+        box-sizing: border-box;
+        width: 100%;
       }
     }
 
