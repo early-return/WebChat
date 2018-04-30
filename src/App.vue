@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <notice-bar></notice-bar>
     <main>
       <router-view></router-view>
     </main>
@@ -13,6 +14,8 @@ import {
 import {
   INITIALIZE,
 } from '@/types/action-types';
+
+import NoticeBar from '@/components/common/NoticeBar';
 
 export default {
   name: 'app',
@@ -50,6 +53,7 @@ export default {
       }
     },
   },
+  components: { NoticeBar },
 };
 </script>
 
@@ -69,8 +73,8 @@ body {
   padding: 5px 10px;
   background-color: $lightblue;
   color: $white;
-  font-size: 14px;
-  border-radius: 15px;
+  font-size: 1rem;
+  border-radius: 16px;
   border: 0;
   text-decoration: none;
   transition: background-color 0.3s;
@@ -87,8 +91,8 @@ input[type="password"] {
   display: inline-block;
   padding: 5px 10px;
   background-color: $white;
-  font-size: 14px;
-  border-radius: 15px;
+  font-size: 1rem;
+  border-radius: 16px;
   border: 1px solid darken($lightgray, 20%);
   outline: none;
   transition: border 0.3s;
@@ -104,7 +108,7 @@ input[type="password"] {
   margin: 0 auto;
 }
 
-@media (min-width: 1000px) {
+@media (min-width: $content-mobile-width) {
   /* 设置滚动条的样式 */
   ::-webkit-scrollbar {
     width: 10px;
@@ -119,10 +123,22 @@ input[type="password"] {
 
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .topbar {
   z-index: 1000;
   flex-shrink: 0;
+}
+#app {
+  display: flex;
+  flex-direction: column;
+
+  .notice-bar {
+    flex: 0 0 auto;
+  }
+
+  main {
+    flex: 0 1 auto;
+  }
 }
 </style>
 

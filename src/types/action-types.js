@@ -6,4 +6,6 @@ export const SEND_MESSAGE = 'SEND_MESSAGE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const CHECK_USER = 'CHECK_USER';
 export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 export const REGISTER = 'REGISTER';
+export const SHOW_NOTICE = 'SHOW_NOTICE';

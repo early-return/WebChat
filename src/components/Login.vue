@@ -19,6 +19,7 @@ import {
   LOGIN,
   REGISTER,
   CHECK_USER,
+  SHOW_NOTICE,
 } from '@/types/action-types';
 import TitleBar from '@/components/common/TitleBar';
 
@@ -73,12 +74,12 @@ export default {
           password: vm.password,
         }).then(() => {
           vm.loginSuccess();
-        }).catch((err) => {
-          vm.errorMessage = err;
+        }).catch(() => {
+          vm.status = 'initial';
         });
       } else if (preStatus === 'register') {
         if (vm.password !== vm.rePassword) {
-          vm.errorMessage = '两次密码输入不一致';
+          vm.$store.dispatch(SHOW_NOTICE, { message: '两次输入的密码不一致', type: 'warning', timeout: 3000 });
         } else {
           vm.$store.dispatch(REGISTER, {
             email: vm.email,
