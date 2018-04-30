@@ -3,7 +3,7 @@
     <navbar class="navbar" :active="active"></navbar>
     <main class="container">
       <div class="user-info">
-        <user-info :user="self"></user-info>
+        <user-info :user="self" :infos="selfInfo"></user-info>
       </div>
       <div class="content-container">
         <div class="content">
@@ -27,6 +27,12 @@ export default {
   computed: {
     self() {
       return this.$store.state.self;
+    },
+    selfInfo() {
+      return [
+        { title: '好友', link: '/friends', content: this.$store.state.friends.length },
+        { title: '动态', link: '/status', content: 12 },
+      ];
     },
   },
   components: {

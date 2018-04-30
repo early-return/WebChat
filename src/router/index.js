@@ -6,6 +6,7 @@ import Home from '@/components/Home';
 import Chat from '@/components/home/Chat';
 import Group from '@/components/home/Group';
 import Status from '@/components/home/Status';
+import Friends from '@/components/home/Friends';
 import Waiting from '@/components/Waiting';
 import Login from '@/components/Login';
 
@@ -51,6 +52,11 @@ const router = new Router({
           path: '/status',
           name: 'Status',
           component: Status,
+        },
+        {
+          path: '/friends',
+          name: 'Friends',
+          component: Friends,
         },
       ],
     },

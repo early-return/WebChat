@@ -10,10 +10,10 @@
       <p class="user-info-name">{{ user.name }}</p>
     </main>
     <footer>
-      <a v-for="info in user.infoList" :href="info.link" :key="info.title" class="user-info-item">
+      <router-link v-for="info in infos" :to="info.link" :key="info.title" class="user-info-item">
         <div class="user-info-item-title">{{ info.title }}</div>
         <div class="user-info-item-content">{{ info.content }}</div>
-      </a>
+      </router-link>
     </footer>
   </div>
 </template>
@@ -21,7 +21,7 @@
 <script>
 export default {
   name: 'user-info',
-  props: ['user'],
+  props: ['user', 'infos'],
 };
 </script>
 

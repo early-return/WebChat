@@ -10,11 +10,16 @@
           <font-awesome-icon class="icon" :icon="groupIcon" />
           <span class="text">群聊</span>
         </router-link>
+        <router-link to="/friends" replace class="nav-item nav-item-status" href="#">
+          <font-awesome-icon class="icon" :icon="friendsIcon" />
+          <span class="text">好友</span>
+        </router-link>
         <router-link to="/status" replace class="nav-item nav-item-status" href="#">
           <font-awesome-icon class="icon" :icon="statusIcon" />
           <span class="text">动态</span>
         </router-link>
       </div>
+
     </div>
   </header>
 </template>
@@ -22,14 +27,16 @@
 <script>
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
 import {
-  faCommentAlt as chatIconReg,
+  faComment as chatIconReg,
   faComments as groupIconReg,
   faStar as statusIconReg,
+  faUser as friendsIconReg,
 } from '@fortawesome/fontawesome-free-regular';
 import {
-  faCommentAlt as chatIconSolid,
+  faComment as chatIconSolid,
   faComments as groupIconSolid,
   faStar as statusIconSolid,
+  faUser as friendsIconSolid,
 } from '@fortawesome/fontawesome-free-solid';
 
 
@@ -49,6 +56,9 @@ export default {
     },
     statusIcon() {
       return this.active === 'Status' ? statusIconSolid : statusIconReg;
+    },
+    friendsIcon() {
+      return this.active === 'Friends' ? friendsIconSolid : friendsIconReg;
     },
   },
   components: {
@@ -70,6 +80,11 @@ export default {
   color: $gray;
   background-color: $white;
   box-shadow: 0 1px 1px darken($lightgray, 20%);
+
+  .menu {
+    width: 50px;
+    align-self: flex-end;
+  }
 }
 .topbar-item {
   display: flex;
