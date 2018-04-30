@@ -9,3 +9,4 @@ export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const REGISTER = 'REGISTER';
 export const SHOW_NOTICE = 'SHOW_NOTICE';
+export const SHOW_OPERATION_BOX = 'SHOW_OPERATION_BOX';

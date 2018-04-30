@@ -14,6 +14,8 @@ import {
   NOTICE_MESSAGE,
   NOTICE_SHOWING,
   NOTICE_TYPE,
+  OPERATION_BOX_SHOWING,
+  OPERATION_BOX_PAYLOAD,
 } from '@/types/mutation-types';
 import {
   INITIALIZE,
@@ -25,6 +27,7 @@ import {
   REGISTER,
   CHECK_USER,
   SHOW_NOTICE,
+  SHOW_OPERATION_BOX,
 } from '@/types/action-types';
 
 Vue.use(Vuex);
@@ -52,10 +55,14 @@ const store = new Vuex.Store({
     // 好友列表
     friends: [],
 
+    // 提示信息相关
     noticeMessage: 'This is a error!',
     noticeShowing: false,
     noticeType: 'info',
 
+    // 操作盒子相关
+    operationBoxShowing: true,
+    operationBoxPayload: { title: 'this is title' },
 
   },
 
@@ -82,6 +89,13 @@ const store = new Vuex.Store({
     [NOTICE_TYPE](state, type) {
       state.noticeType = type;
     },
+    [OPERATION_BOX_SHOWING](state, showing) {
+      state.operationBoxShowing = showing;
+    },
+    [OPERATION_BOX_PAYLOAD](state, payload) {
+      state.operationBoxPayload = payload;
+    },
+
     [TOKEN](state, token) {
       state.token = token;
     },
@@ -115,6 +129,11 @@ const store = new Vuex.Store({
       if (payload.timeout && payload.timeout > 0) {
         setTimeout(() => { commit(NOTICE_SHOWING, false); }, payload.timeout);
       }
+    },
+
+    [SHOW_OPERATION_BOX]({ commit }, payload) {
+      commit(OPERATION_BOX_SHOWING, true);
+      commit(OPERATION_BOX_PAYLOAD, payload);
     },
 
     // 初始化应用
@@ -158,16 +177,22 @@ const store = new Vuex.Store({
     },
 
     [LOGOUT]({ state, commit, dispatch }) {
-      axios.post(`${baseUrl}/logout`, {
-        token: state.token,
-        uid: state.self._id,
-      }).then((response) => {
-        if (response.data.success) {
-          dispatch(SHOW_NOTICE, { message: '登出成功！', type: 'success', timeout: 3000 });
-          localStorage.removeItem('token');
-          commit(TOKEN, 'a');
-          commit(SELF, null);
-        }
+      return new Promise((resolve, reject) => {
+        axios.post(`${baseUrl}/logout`, {
+          token: state.token,
+          uid: state.self._id,
+        }).then((response) => {
+          if (response.data.success) {
+            dispatch(SHOW_NOTICE, { message: '登出成功！', type: 'success', timeout: 3000 });
+            localStorage.removeItem('token');
+            commit(TOKEN, 'a');
+            commit(SELF, null);
+            resolve();
+          } else {
+            dispatch(SHOW_NOTICE, { message: response.data.message, type: 'error', timeout: 3000 });
+            reject(new Error(response.data.message));
+          }
+        });
       });
     },
 

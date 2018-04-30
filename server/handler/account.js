@@ -84,7 +84,7 @@ module.exports = {
   },
 
   logout(req, res) {
-    processLogout(req.body.token, req.body.uid)
+    processLogout(req.body.uid, req.body.token)
       .then(data => res.json(data))
       .catch(err => res.json(util.resp(false, err.message, err.toString())));
   },

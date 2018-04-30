@@ -19,7 +19,15 @@
           <span class="text">动态</span>
         </router-link>
       </div>
-
+      <div class="menu">
+        <font-awesome-icon class="menu-icon" @click="switchMenu" :icon="menuIcon" />
+        <div class="menu-content" v-if="showingMenu">
+          <router-link to="/friend/add" class="menu-item">添加好友</router-link>
+          <router-link to="/chat" class="menu-item">加入群组</router-link>
+          <router-link to="/chat" class="menu-item">创建群组</router-link>
+          <div @click="logout" class="menu-item">登出账号</div>
+        </div>
+      </div>
     </div>
   </header>
 </template>
@@ -37,13 +45,19 @@ import {
   faComments as groupIconSolid,
   faStar as statusIconSolid,
   faUser as friendsIconSolid,
+  faEllipsisV as menuIcon,
 } from '@fortawesome/fontawesome-free-solid';
+
+import {
+  LOGOUT,
+} from '@/types/action-types';
 
 
 export default {
   name: 'navbar',
   data() {
     return {
+      showingMenu: false,
     };
   },
   props: ['active'],
@@ -59,6 +73,18 @@ export default {
     },
     friendsIcon() {
       return this.active === 'Friends' ? friendsIconSolid : friendsIconReg;
+    },
+    menuIcon() {
+      return menuIcon;
+    },
+  },
+  methods: {
+    switchMenu() {
+      this.showingMenu = !this.showingMenu;
+    },
+    logout() {
+      this.$store.dispatch(LOGOUT)
+        .then(() => this.$router.replace('/login'));
     },
   },
   components: {
@@ -81,9 +107,54 @@ export default {
   background-color: $white;
   box-shadow: 0 1px 1px darken($lightgray, 20%);
 
+  .container {
+    position: relative;
+  }
+
   .menu {
-    width: 50px;
-    align-self: flex-end;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .menu-icon {
+      width: 18px;
+      height: 18px;
+      padding: 13px;
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .menu-content {
+      position: absolute;
+      width: 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      box-shadow: 0px 0px 1px #666;
+      top: 45px;
+      right: 0;
+
+      .menu-item {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-decoration: none;
+        text-align: center;
+        background-color: #fff;
+        padding: 10px 15px;
+        border-top: 1px olid #EEE;
+        color: #66757f;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
   }
 }
 .topbar-item {

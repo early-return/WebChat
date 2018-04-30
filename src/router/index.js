@@ -7,6 +7,7 @@ import Chat from '@/components/home/Chat';
 import Group from '@/components/home/Group';
 import Status from '@/components/home/Status';
 import Friends from '@/components/home/Friends';
+import FriendAdd from '@/components/account/FriendAdd';
 import Waiting from '@/components/Waiting';
 import Login from '@/components/Login';
 
@@ -68,6 +69,13 @@ const router = new Router({
       component: Converse,
       props: true,
       meta: { requiresAuth: true },
+    },
+
+    {
+      path: '/friend/add',
+      name: 'FriendAdd',
+      meta: { requiresAuth: true },
+      component: FriendAdd,
     },
 
     // 个人信息界面相关路由

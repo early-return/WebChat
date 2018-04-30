@@ -4,6 +4,7 @@
     <main>
       <router-view></router-view>
     </main>
+    <operation-box class="operation-box"></operation-box>
   </div>
 </template>
 
@@ -16,6 +17,7 @@ import {
 } from '@/types/action-types';
 
 import NoticeBar from '@/components/common/NoticeBar';
+import OperationBox from '@/components/common/OperationBox';
 
 export default {
   name: 'app',
@@ -53,7 +55,7 @@ export default {
       }
     },
   },
-  components: { NoticeBar },
+  components: { NoticeBar, OperationBox },
 };
 </script>
 
@@ -82,6 +84,7 @@ body {
 
   &:hover {
     background-color: darken($lightblue, 10%);
+    cursor: pointer;
   }
 }
 
@@ -138,6 +141,13 @@ input[type="password"] {
 
   main {
     flex: 0 1 auto;
+  }
+
+  .operation-box {
+    z-index: 1001;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 }
 </style>
