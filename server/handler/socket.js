@@ -9,6 +9,7 @@ const idMap = new Map();
 const sendMessage = async (data) => {
   const msg = data.message;
   msg._id = new ObjectID();
+  msg.date = new Date();
   await util.auth(data.token, msg.fromId);
   await db.addMessage(msg);
   if (socketMap.has(msg.fromId)) {

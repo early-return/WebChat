@@ -6,6 +6,10 @@ const COL_USERS = 'users';
 const COL_TOKENS = 'tokens';
 const COL_FRIENDS = 'friends';
 const COL_MESSAGES = 'messages';
+const COL_GROUPS = 'groups';
+const COL_GROUP_USERS = 'group_users';
+const COL_GROUP_MESSAGES = 'group_messages';
+const COL_STATUS = 'status';
 
 const getDB = async (colName) => {
   const client = await mongo.connect(config.mongoAddress);
@@ -145,7 +149,6 @@ module.exports = {
   // 消息相关
   async addMessage(msg) {
     msg.session = new ObjectID(msg.toId);
-    msg.date = new Date();
 
     let db = await getDB(`${COL_MESSAGES}_${msg.fromId}`);
     const res = await db.col.insertOne(msg);
@@ -161,6 +164,95 @@ module.exports = {
     const db = await getDB(`${COL_MESSAGES}_${uid}`);
 
     const res = await db.col.find().sort({ date: -1 }).toArray();
+    db.client.close();
+    return res;
+  },
+
+  // 群组相关
+  async addGroup(name, createdBy) {
+    createdBy = new ObjectID(createdBy);
+    const db = await getDB(COL_GROUPS);
+    const res = await db.col.findOneAndUpdate(
+      { _id: new ObjectID() },
+      { $set: { name, createdBy } },
+      {
+        returnOriginal: false,
+        upsert: true,
+      },
+    );
+    db.client.close();
+    return res;
+  },
+
+  async findGroup(condition) {
+    const db = await getDB(COL_GROUPS);
+    const res = db.col.findOne(condition);
+    db.client.close();
+    return res;
+  },
+
+  async addGroupsUser(gid, uid) {
+    const db = await getDB(COL_GROUP_USERS);
+    const res = await db.col.insertOne({
+      gid: new ObjectID(gid),
+      uid: new ObjectID(uid),
+    });
+    db.client.close();
+    return res;
+  },
+
+  async findUserGroups(uid) {
+    let db = await getDB(COL_GROUP_USERS);
+    const res = await db.col.find({ uid }).toArray();
+    const ids = res.map(item => item.gid);
+    db.client.close();
+    db = await getDB(COL_GROUPS);
+    const doc = db.col.find({ _id: { $in: ids } }).toArray();
+    db.client.close();
+    return doc;
+  },
+
+
+  // 群消息相关
+  async addGroupMessage(msg) {
+    const db = await getDB(COL_GROUP_MESSAGES);
+    const res = await db.col.insertOne(msg);
+    db.client.close();
+    return res;
+  },
+
+  async findGroupMessages(condition) {
+    const db = await getDB(COL_GROUP_MESSAGES);
+
+    const res = await db.col.find(condition).sort({ date: -1 }).toArray();
+    db.client.close();
+    return res;
+  },
+
+  // 状态相关
+  async addStatus(status) {
+    const db = await getDB(COL_STATUS);
+    const res = await db.col.findOneAndUpdate(
+      { _id: new ObjectID() },
+      { $set: status },
+      {
+        returnOriginal: false,
+        upsert: true,
+      },
+    );
+    db.client.close();
+    return res;
+  },
+
+  async findStatus(uid, skip, limit) {
+    const id = new ObjectID(uid);
+    let db = await getDB(COL_FRIENDS);
+    const friends = await db.col.find({ fromUid: id }).toArray();
+    const ids = friends.map(friend => friend.toUid);
+    ids.push(id);
+    db.client.close();
+    db = getDB(COL_STATUS);
+    const res = db.col.find({ uid: { $in: ids } }).skip(skip).limit(limit).toArray();
     db.client.close();
     return res;
   },

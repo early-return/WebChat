@@ -2,6 +2,7 @@ const router = require('express').Router();
 const account = require('./handler/account');
 const friend = require('./handler/friend');
 const message = require('./handler/message');
+const group = require('./handler/group');
 
 router.get('/test', (req, res) => {
   res.json({
@@ -24,5 +25,9 @@ router.get('/friends/unknown/:uid/:token', friend.getUnknownFriends);
 router.post('/friends/add', friend.addFriend);
 
 router.get('/messages/:uid/:token', message.getAllMessages);
+
+router.get('/messages/group/:uid/:token', group.getGroupMessages);
+router.post('/groups/create', group.createGroup);
+router.post('/groups/join', group.addGroup);
 
 module.exports = router;
