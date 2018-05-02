@@ -7,7 +7,7 @@
     <input type="email" placeholder="请输入您的邮箱" v-model="email">
     <input type='text' autofocus placeholder="请输入您的名字" v-model="name" v-show="status === 'register'">
     <input type="password" autofocus v-show="status === 'login' || status === 'register'" placeholder="请输入您的密码" v-model="password">
-    <input type="password" v-show="status === 'register'" v-model="rePassword">
+    <input type="password" placeholder="请再次输入您的密码" v-show="status === 'register'" v-model="rePassword">
     <a class="btn" href="#" @click="action">{{ button }}</a>
   </div>
 

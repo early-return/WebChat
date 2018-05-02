@@ -42,6 +42,7 @@ export default {
     },
     closeBox() {
       this.$store.commit(OPERATION_BOX_SHOWING, false);
+      this.text = '';
     },
   },
 };
