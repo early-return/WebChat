@@ -22,6 +22,12 @@ const processAddGroup = async (token, uid, gname) => {
   return doc;
 };
 
+const processGetGroups = async (token, uid) => {
+  await util.auth(token, uid);
+  const res = await db.findUserGroups(uid);
+  return res;
+};
+
 const processGetGroupMessages = async (token, uid) => {
   await util.auth(token, uid);
   const res = await db.findUserGroups(uid);
@@ -46,6 +52,11 @@ module.exports = {
   },
   addGroup(req, res) {
     processAddGroup(req.body.token, req.body.uid, req.body.gname)
+      .then(data => res.json(util.resp(true, '', data)))
+      .catch(err => res.json(util.resp(false, err.message, err.toString())));
+  },
+  getGroups(req, res) {
+    processGetGroups(req.params.token, req.params.uid)
       .then(data => res.json(util.resp(true, '', data)))
       .catch(err => res.json(util.resp(false, err.message, err.toString())));
   },

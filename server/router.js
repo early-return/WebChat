@@ -27,6 +27,7 @@ router.post('/friends/add', friend.addFriend);
 router.get('/messages/:uid/:token', message.getAllMessages);
 
 router.get('/messages/group/:uid/:token', group.getGroupMessages);
+router.get('/groups/:uid/:token', group.getGroups);
 router.post('/groups/create', group.createGroup);
 router.post('/groups/join', group.addGroup);
 
