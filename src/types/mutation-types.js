@@ -1,5 +1,7 @@
 export const INITIALIZED = 'INITIALIZED';
 export const FRIENDS = 'FRIENDS';
+export const UNKNOWN_FRIENDS = 'UNKNOWN_FRIENDS';
+export const FRIEND = 'FRIEND';
 export const FRIENDS_RECENT = 'FRIENDS_RECENT';
 export const MESSAGES = 'MESSAGES';
 export const TOKEN = 'TOKEN';

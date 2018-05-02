@@ -1,6 +1,6 @@
 <template>
   <div class="converse">
-    <title-bar class="title-bar" :title="`与 ${friend.name} 的聊天`" canBack></title-bar>
+    <title-bar class="title-bar" :title="`与 ${unknown ? '陌生人(' + friend.name + ')' : friend.name} 的聊天`" canBack></title-bar>
     <main class="container">
       <aside class="user-info">
         <user-info :user="friend"></user-info>
@@ -31,6 +31,7 @@ export default {
   props: ['uid'],
   data() {
     return {
+      unknown: false,
     };
   },
   mounted() {
@@ -44,7 +45,8 @@ export default {
     friend() {
       let friend = this.$store.getters.getFriendByUID(this.uid);
       if (!friend) {
-        friend = { _id: this.uid, name: '陌生人', avatar: '/static/avatar/unknown.png' };
+        friend = this.$store.getters.getUnknownFriendByUID(this.uid);
+        this.unknown = true;
       }
       return friend;
     },

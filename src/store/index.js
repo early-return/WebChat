@@ -9,6 +9,8 @@ import {
   SELF,
   INITIALIZED,
   FRIENDS,
+  UNKNOWN_FRIENDS,
+  FRIEND,
   MESSAGES,
   MESSAGE,
   NOTICE_MESSAGE,
@@ -21,6 +23,7 @@ import {
   INITIALIZE,
   FETCH_MESSAGES,
   FETCH_FRIENDS,
+  FETCH_UNKNOWN_FRIENDS,
   LOGIN,
   LOGOUT,
   SEND_MESSAGE,
@@ -28,6 +31,7 @@ import {
   CHECK_USER,
   SHOW_NOTICE,
   SHOW_OPERATION_BOX,
+  ADD_FRIEND,
 } from '@/types/action-types';
 
 Vue.use(Vuex);
@@ -55,6 +59,9 @@ const store = new Vuex.Store({
     // 好友列表
     friends: [],
 
+    // 陌生好友列表
+    unknownFriends: [],
+
     // 提示信息相关
     noticeMessage: 'This is a error!',
     noticeShowing: false,
@@ -71,6 +78,7 @@ const store = new Vuex.Store({
     self: state => state.self,
     getMessagesByUID: state => uid => state.allMessages[`${uid}`],
     getFriendByUID: state => uid => state.friends.find(user => user._id === uid),
+    getUnknownFriendByUID: state => uid => state.unknownFriends.find(user => user._id === uid),
     recentMessages: state => Object.values(state.allMessages)
       .map(messages => messages[0])
       .sort((msg1, msg2) => msg1.date - msg2.date),
@@ -105,6 +113,12 @@ const store = new Vuex.Store({
     [FRIENDS](state, friends) {
       state.friends = friends;
     },
+    [UNKNOWN_FRIENDS](state, friends) {
+      state.unknownFriends = friends;
+    },
+    [FRIEND](state, friend) {
+      state.friends.push(friend);
+    },
     [MESSAGES](state, payload) {
       if (payload.replace) {
         state.allMessages = payload.messages;
@@ -116,7 +130,7 @@ const store = new Vuex.Store({
       if (state.allMessages[message.session]) {
         state.allMessages[message.session].unshift(message);
       } else {
-        state.allMessages[message.session] = [message];
+        Vue.set(state.allMessages, message.session, [message]);
       }
     },
   },
@@ -147,6 +161,7 @@ const store = new Vuex.Store({
             commit(SELF, response.data.data);
             socket.emit('auth', { token: state.token, uid: state.self._id });
             dispatch(FETCH_FRIENDS);
+            dispatch(FETCH_UNKNOWN_FRIENDS);
             dispatch(FETCH_MESSAGES);
           }
           commit(INITIALIZED, { status: true });
@@ -217,6 +232,22 @@ const store = new Vuex.Store({
       });
     },
 
+    [ADD_FRIEND]({ state, commit, dispatch }, email) {
+      axios.post(`${baseUrl}/friends/add`, {
+        token: state.token,
+        fromId: state.self._id,
+        toEmail: email,
+      }).then((response) => {
+        if (response.data.success) {
+          console.log(response);
+          commit(FRIEND, response.data.data);
+          dispatch(SHOW_NOTICE, { message: '好友添加成功！', type: 'success', timeout: 3000 });
+        } else {
+          dispatch(SHOW_NOTICE, { message: response.data.message, type: 'error' });
+        }
+      });
+    },
+
 
     // 请求 API 相关 Action
     [FETCH_MESSAGES]({ state, commit, dispatch }) {
@@ -237,6 +268,16 @@ const store = new Vuex.Store({
         .then((response) => {
           if (response.data.success) {
             commit(FRIENDS, response.data.data);
+          } else {
+            dispatch(SHOW_NOTICE, { message: response.data.message, type: 'error' });
+          }
+        });
+    },
+    [FETCH_UNKNOWN_FRIENDS]({ state, commit, dispatch }) {
+      axios.get(`${baseUrl}/friends/unknown/${state.self._id}/${state.token}`)
+        .then((response) => {
+          if (response.data.success) {
+            commit(UNKNOWN_FRIENDS, response.data.data);
           } else {
             dispatch(SHOW_NOTICE, { message: response.data.message, type: 'error' });
           }

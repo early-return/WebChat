@@ -39,7 +39,11 @@ export default {
       if (uid === this.self._id) {
         return this.self.avatar;
       }
-      return this.$store.getters.getFriendByUID(uid).avatar;
+      let friend = this.$store.getters.getUnknownFriendByUID(uid);
+      if (!friend) {
+        friend = this.$store.getters.getFriendByUID(uid);
+      }
+      return friend.avatar;
     },
   },
 };

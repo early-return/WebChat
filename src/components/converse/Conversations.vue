@@ -28,9 +28,9 @@ export default {
   },
   methods: {
     getAvatar(id) {
-      const friend = this.$store.getters.getFriendByUID(id);
+      let friend = this.$store.getters.getFriendByUID(id);
       if (!friend) {
-        return '/static/avatar/unknown.png';
+        friend = this.$store.getters.getUnknownFriendByUID(id);
       }
       return friend.avatar;
     },
@@ -38,10 +38,12 @@ export default {
       if (id === this.self._id) {
         return '我';
       }
-      const friend = this.$store.getters.getFriendByUID(id);
+      let friend = this.$store.getters.getFriendByUID(id);
       if (!friend) {
-        return '陌生人';
+        friend = this.$store.getters.getUnknownFriendByUID(id);
+        return `${friend.name}(陌生人)`;
       }
+
       return friend.name;
     },
   },

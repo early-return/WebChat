@@ -3,7 +3,7 @@
     <div class="operation-box-box">
       <header>
         <div class="title">{{ payload.title }}</div>
-        <div class="close-btn" @click="close">x</div>
+        <div class="close-btn" @click="closeBox">x</div>
       </header>
       <main><input type="text" v-model="text"></main>
       <footer>
@@ -38,9 +38,9 @@ export default {
       if (this.payload.callback) {
         this.payload.callback(this.text);
       }
-      close();
+      this.closeBox();
     },
-    close() {
+    closeBox() {
       this.$store.commit(OPERATION_BOX_SHOWING, false);
     },
   },

@@ -1,10 +1,14 @@
 export const INITIALIZE = 'INITIALIZE';
 export const FETCH_MESSAGES = 'FETCH_MESSAGES';
 export const FETCH_FRIENDS = 'FETCH_FRIENDS';
+export const FETCH_UNKNOWN_FRIENDS = 'FETCH_UNKNOWN_FRIENDS';
 export const FETCH_RECENT_MESSAGES = 'FETCH_RECENT_MESSAGES';
 export const SEND_MESSAGE = 'SEND_MESSAGE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const CHECK_USER = 'CHECK_USER';
+export const ADD_FRIEND = 'ADD_FRIEND';
+export const ADD_GROUP = 'ADD_GROUP';
+export const CREATE_GROUP = 'CREATE_GROUP';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const REGISTER = 'REGISTER';

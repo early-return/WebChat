@@ -51,6 +51,7 @@ import {
 import {
   LOGOUT,
   SHOW_OPERATION_BOX,
+  ADD_FRIEND,
 } from '@/types/action-types';
 
 
@@ -90,8 +91,8 @@ export default {
     addFriend() {
       this.$store.dispatch(SHOW_OPERATION_BOX, {
         title: '请输入想要添加的好友的邮箱',
-        callback: () => {
-
+        callback: (email) => {
+          this.$store.dispatch(ADD_FRIEND, email);
         },
       });
       this.switchMenu();

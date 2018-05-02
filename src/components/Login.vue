@@ -5,8 +5,9 @@
 
   <div class="login-form">
     <input type="email" placeholder="请输入您的邮箱" v-model="email">
-    <input type="password" autofocus :class="{'no-display' : status !== 'login' && status !== 'register'}" placeholder="请输入您的密码" v-model="password">
-    <input type="password" :class="{'no-display' : status !== 'register'}" placeholder="请再次输入您的密码" v-model="rePassword">
+    <input type='text' autofocus placeholder="请输入您的名字" v-model="name" v-show="status === 'register'">
+    <input type="password" autofocus v-show="status === 'login' || status === 'register'" placeholder="请输入您的密码" v-model="password">
+    <input type="password" v-show="status === 'register'" v-model="rePassword">
     <a class="btn" href="#" @click="action">{{ button }}</a>
   </div>
 
@@ -28,6 +29,7 @@ export default {
   data() {
     return {
       email: '',
+      name: '',
       status: 'initial',
       password: '',
       rePassword: '',
@@ -80,9 +82,11 @@ export default {
       } else if (preStatus === 'register') {
         if (vm.password !== vm.rePassword) {
           vm.$store.dispatch(SHOW_NOTICE, { message: '两次输入的密码不一致', type: 'warning', timeout: 3000 });
+          vm.status = 'register';
         } else {
           vm.$store.dispatch(REGISTER, {
             email: vm.email,
+            name: vm.name,
             password: vm.password,
           }).then(() => {
             vm.loginSuccess();
@@ -115,9 +119,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-.no-display {
-  display: none;
 }
 input {
   margin-bottom: 10px;

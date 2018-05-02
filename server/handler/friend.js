@@ -7,10 +7,20 @@ const processGetFriends = async (token, uid) => {
   return util.resp(true, '', res);
 };
 
+const processGetUnknownFriends = async (token, uid) => {
+  await util.auth(token, uid);
+  const res = await db.findAllUnknownFriends(uid);
+  return util.resp(true, '', res);
+};
+
 const processAddFriend = async (token, fromId, toId) => {
   await util.auth(token, fromId);
   await db.addFriend(fromId, toId);
-  return util.resp(true, '', null);
+  const res = db.findUser({ _id: toId });
+  if (res.length < 1) {
+    throw new Error('服务器出错！');
+  }
+  return util.resp(true, '', res[0]);
 };
 
 const processAddFriendWithEmail = async (token, fromId, toEmail) => {
@@ -25,6 +35,12 @@ const processAddFriendWithEmail = async (token, fromId, toEmail) => {
 module.exports = {
   getFriends(req, res) {
     processGetFriends(req.params.token, req.params.uid)
+      .then(data => res.json(data))
+      .catch(err => res.json(util.resp(false, err.message, err.toString())));
+  },
+
+  getUnknownFriends(req, res) {
+    processGetUnknownFriends(req.params.token, req.params.uid)
       .then(data => res.json(data))
       .catch(err => res.json(util.resp(false, err.message, err.toString())));
   },

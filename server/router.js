@@ -20,6 +20,7 @@ router.post('/register', account.register);
 router.post('/profile/update', account.updateProfile);
 
 router.get('/friends/:uid/:token', friend.getFriends);
+router.get('/friends/unknown/:uid/:token', friend.getUnknownFriends);
 router.post('/friends/add', friend.addFriend);
 
 router.get('/messages/:uid/:token', message.getAllMessages);

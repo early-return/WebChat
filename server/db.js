@@ -87,10 +87,14 @@ module.exports = {
   async addFriend(fromUid, toUid) {
     const db = await getDB(COL_FRIENDS);
 
-    const res = await db.col.insertOne({
-      fromUid: new ObjectID(fromUid),
-      toUid: new ObjectID(toUid),
-    });
+    const res = await db.col.findOneAndUpdate(
+      { _id: new ObjectID() },
+      { $set: { fromUid: new ObjectID(fromUid), toUid: new ObjectID(toUid) } },
+      {
+        returnOriginal: false,
+        upsert: true,
+      },
+    );
     db.client.close();
     return res;
   },
@@ -114,9 +118,8 @@ module.exports = {
   async findAllUnknownFriends(uid) {
     let db = await getDB(COL_FRIENDS);
 
-    const ids = await db.col.find({ toUid: new ObjectID(uid) })
-      .toArray()
-      .map(friend => friend.toUid);
+    const friends = await db.col.find({ toUid: new ObjectID(uid) }).toArray();
+    const ids = friends.map(friend => friend.fromUid);
     db.client.close();
 
     db = await getDB(COL_USERS);
