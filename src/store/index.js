@@ -19,6 +19,7 @@ import {
   OPERATION_BOX_SHOWING,
   OPERATION_BOX_PAYLOAD,
   GROUPS,
+  GROUP,
   GROUP_MESSAGES,
   GROUP_MESSAGE,
 } from '@/types/mutation-types';
@@ -136,6 +137,9 @@ const store = new Vuex.Store({
     [GROUPS](state, groups) {
       state.groups = groups;
     },
+    [GROUP](state, group) {
+      state.groups.push(group);
+    },
     [GROUP_MESSAGES](state, messages) {
       state.groupMessages = messages;
     },
@@ -143,7 +147,7 @@ const store = new Vuex.Store({
       if (state.groupMessages[message.gid]) {
         state.groupMessages[message.gid].unshift(message);
       } else {
-        Vue.set(state.groupMessages, message.gid, message);
+        Vue.set(state.groupMessages, message.gid, [message]);
       }
     },
     [FRIEND](state, friend) {
@@ -331,21 +335,23 @@ const store = new Vuex.Store({
           commit(GROUP_MESSAGES, response.data.data);
         });
     },
-    [ADD_GROUP]({ state, dispatch }, gname) {
+    [ADD_GROUP]({ state, commit, dispatch }, gname) {
       axios.post(`${baseUrl}/groups/join`, {
         token: state.token,
         uid: state.self._id,
         gname,
-      }).then(() => {
+      }).then((data) => {
+        commit(GROUP, data.data.data);
         dispatch(SHOW_NOTICE, { message: '已加入该群组！', type: 'success', timeout: 3000 });
       });
     },
-    [CREATE_GROUP]({ state, dispatch }, gname) {
+    [CREATE_GROUP]({ state, commit, dispatch }, gname) {
       axios.post(`${baseUrl}/groups/create`, {
         token: state.token,
         uid: state.self._id,
         gname,
-      }).then(() => {
+      }).then((data) => {
+        commit(GROUP, data.data.data);
         dispatch(SHOW_NOTICE, { message: '已成功创建该群组！', type: 'success', timeout: 3000 });
       });
     },

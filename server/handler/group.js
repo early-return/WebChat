@@ -18,8 +18,8 @@ const processAddGroup = async (token, uid, gname) => {
   if (!res) {
     throw new Error('未找到该群组！');
   }
-  const doc = await db.addGroupsUser(res._id, uid);
-  return doc;
+  await db.addGroupsUser(res._id, uid);
+  return res;
 };
 
 const processGetGroups = async (token, uid) => {

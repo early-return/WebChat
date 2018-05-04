@@ -49,9 +49,6 @@ module.exports = {
     socket.on('auth', (data) => {
       util.auth(data.token, data.uid)
         .then(() => {
-          if (socketMap.has(data.uid)) {
-            socketMap.get(data.uid).emit('error', { message: '该账号在其他地方登录，您已被强制下线！' });
-          }
           socketMap.set(data.uid, socket);
           idMap.set(socket, data.uid);
           socket.emit('success', { success: true, message: '已连接到服务器！' });

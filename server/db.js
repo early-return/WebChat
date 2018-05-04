@@ -99,6 +99,17 @@ module.exports = {
     return res;
   },
 
+  async checkFriend(fromId, toId) {
+    const db = await getDB(COL_FRIENDS);
+
+    const res = await db.col.findOne({
+      fromUid: new ObjectID(fromId),
+      toUid: new ObjectID(toId),
+    });
+
+    return res;
+  },
+
   async findAllFriends(uid) {
     let db = await getDB(COL_FRIENDS);
 

@@ -19,8 +19,13 @@ const processAddFriendWithEmail = async (token, fromId, toEmail) => {
   if (users.length < 1) {
     throw new Error('未找到邮箱所对应的用户！');
   }
-  await db.addFriend(fromId, users[0]._id);
-  const res = db.findUser({ _id: users[0]._id });
+  const toId = users[0]._id;
+  const af = await db.checkFriend(fromId, toId);
+  if (af) {
+    throw new Error('该用户已是您的好友！');
+  }
+  await db.addFriend(fromId, toId);
+  const res = await db.findUser({ _id: toId });
   if (res.length < 1) {
     throw new Error('服务器错误！');
   }

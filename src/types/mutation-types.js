@@ -5,6 +5,7 @@ export const FRIEND = 'FRIEND';
 export const FRIENDS_RECENT = 'FRIENDS_RECENT';
 export const MESSAGES = 'MESSAGES';
 export const GROUPS = 'GROUPS';
+export const GROUP = 'GROUP';
 export const GROUP_MESSAGES = 'GROUPS_MESSAGES';
 export const GROUP_MESSAGE = 'GROUP_MESSAGE';
 export const TOKEN = 'TOKEN';
