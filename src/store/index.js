@@ -48,12 +48,10 @@ const socket = io(config.socketAddress);
 
 const baseUrl = `${config.serverAddress}/api`;
 
-let firstConnected = false;
-
 const store = new Vuex.Store({
   state: {
     // 用户登录后取得的令牌
-    token: 'a',
+    token: '',
 
     // 当前已登录的用户信息
     self: null,
@@ -143,7 +141,7 @@ const store = new Vuex.Store({
     },
     [GROUP_MESSAGE](state, message) {
       if (state.groupMessages[message.gid]) {
-        state.groupMessages[message.gid].push(message);
+        state.groupMessages[message.gid].unshift(message);
       } else {
         Vue.set(state.groupMessages, message.gid, message);
       }
@@ -186,6 +184,10 @@ const store = new Vuex.Store({
     [INITIALIZE]({ state, commit, dispatch }) {
       if (localStorage.getItem('token')) {
         commit(TOKEN, localStorage.getItem('token'));
+      }
+      if (!state.token) {
+        commit(INITIALIZED, { status: true });
+        return;
       }
       axios.get(`${baseUrl}/auth/${state.token}`)
         .then((response) => {
@@ -234,7 +236,7 @@ const store = new Vuex.Store({
           if (response.data.success) {
             dispatch(SHOW_NOTICE, { message: '登出成功！', type: 'success', timeout: 3000 });
             localStorage.removeItem('token');
-            commit(TOKEN, 'a');
+            commit(TOKEN, '');
             commit(SELF, null);
             resolve();
           } else {
@@ -387,17 +389,20 @@ socket.on('message', (data) => {
 });
 
 socket.on('group message', (data) => {
+  console.log('on group message: ', data);
   store.commit(GROUP_MESSAGE, data);
 });
 
 socket.on('info', (data) => {
-  if (!data.success) {
-    store.dispatch(SHOW_NOTICE, { message: data.message, type: 'error' });
-  }
+  store.dispatch(SHOW_NOTICE, { message: data.message, type: 'info', timeout: 3000 });
 });
 
-socket.on('connect', () => {
-  firstConnected = true;
+socket.on('success', (data) => {
+  store.dispatch(SHOW_NOTICE, { message: data.message, type: 'success', timeout: 3000 });
+});
+
+socket.on('error', (data) => {
+  store.dispatch(SHOW_NOTICE, { message: data.message, type: 'error' });
 });
 
 socket.on('connect_error', () => {
@@ -422,9 +427,6 @@ socket.on('reconnect_error', () => {
 
 socket.on('reconnect', () => {
   store.dispatch(SHOW_NOTICE, { message: '已成功连接到服务器！', type: 'success', timeout: 3000 });
-  if (!firstConnected) {
-    store.dispatch(INITIALIZE);
-    firstConnected = true;
-  }
+  store.dispatch(INITIALIZE);
 });
 export default store;

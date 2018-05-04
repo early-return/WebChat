@@ -24,22 +24,53 @@ const sendMessage = async (data) => {
   }
 };
 
+const sendGroupMessage = async (data) => {
+  const msg = data.message;
+  msg._id = new ObjectID();
+  msg.date = new Date();
+  await util.auth(data.token, msg.fromId);
+  await db.addGroupMessage(msg);
+  const ids = await db.findGroupUsersId(msg.gid);
+  ids.forEach((id) => {
+    if (socketMap.has(id.toString())) {
+      const socket = socketMap.get(id.toString());
+      socket.emit('group message', msg);
+    }
+  });
+};
+
+process.on('unhandledRejection', (error) => {
+  console.error('unhandledRejection', error);
+  process.exit(1); // To exit with a 'failure' code
+});
+
 module.exports = {
   handle(socket) {
     socket.on('auth', (data) => {
       util.auth(data.token, data.uid)
         .then(() => {
+          if (socketMap.has(data.uid)) {
+            socketMap.get(data.uid).emit('error', { message: '该账号在其他地方登录，您已被强制下线！' });
+          }
           socketMap.set(data.uid, socket);
           idMap.set(socket, data.uid);
-          socket.on('message', (msg) => {
-            sendMessage(msg)
-              .catch((err) => {
-                socket.emit('info', { success: false, message: err.message });
-              });
-          });
-          socket.emit('info', { success: true, message: '已连接到服务器！' });
+          socket.emit('success', { success: true, message: '已连接到服务器！' });
         }).catch((err) => {
-          socket.emit('info', { success: false, message: err.message });
+          socket.emit('error', { success: false, message: err.message });
+        });
+    });
+
+    socket.on('message', (msg) => {
+      sendMessage(msg)
+        .catch((err) => {
+          console.log(err.message, err);
+        });
+    });
+
+    socket.on('group message', (msg) => {
+      sendGroupMessage(msg)
+        .catch((err) => {
+          console.log(err.message, err);
         });
     });
 

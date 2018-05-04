@@ -91,14 +91,10 @@ module.exports = {
   async addFriend(fromUid, toUid) {
     const db = await getDB(COL_FRIENDS);
 
-    const res = await db.col.findOneAndUpdate(
-      { _id: new ObjectID() },
-      { $set: { fromUid: new ObjectID(fromUid), toUid: new ObjectID(toUid) } },
-      {
-        returnOriginal: false,
-        upsert: true,
-      },
-    );
+    const res = await db.col.insertOne({
+      fromUid: new ObjectID(fromUid),
+      toUid: new ObjectID(toUid),
+    });
     db.client.close();
     return res;
   },
@@ -212,9 +208,19 @@ module.exports = {
     return doc;
   },
 
+  async findGroupUsersId(gid) {
+    const db = await getDB(COL_GROUP_USERS);
+    const res = await db.col.find({ gid: new ObjectID(gid) }).toArray();
+    const ids = res.map(item => item.uid);
+    db.client.close();
+    return ids;
+  },
+
 
   // 群消息相关
   async addGroupMessage(msg) {
+    msg.gid = new ObjectID(msg.gid);
+    msg.fromId = new ObjectID(msg.fromId);
     const db = await getDB(COL_GROUP_MESSAGES);
     const res = await db.col.insertOne(msg);
     db.client.close();

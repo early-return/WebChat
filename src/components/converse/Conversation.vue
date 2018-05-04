@@ -2,7 +2,7 @@
 <div class="scroll-to-bottom">
   <div class="session">
     <div class="message" v-if="messages" :class="{ self: msg.fromId == self._id }" v-for="msg in messages" :title="msg.date" :key="msg._id">
-      <img class="avatar" :src="getAvatar(msg.fromId)">
+      <img class="avatar" :src="msg.fromAvatar">
       <p class="bubble">{{ msg.message }}</p>
     </div>
     <div class="no-message" v-if="!messages || messages.length === 0">
@@ -34,16 +34,6 @@ export default {
     scrollToBottom() {
       const content = document.querySelector('.scroll-to-bottom');
       content.scrollTop = content.scrollHeight;
-    },
-    getAvatar(uid) {
-      if (uid === this.self._id) {
-        return this.self.avatar;
-      }
-      let friend = this.$store.getters.getUnknownFriendByUID(uid);
-      if (!friend) {
-        friend = this.$store.getters.getFriendByUID(uid);
-      }
-      return friend.avatar;
     },
   },
 };

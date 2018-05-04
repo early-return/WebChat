@@ -85,6 +85,8 @@ export default {
         this.$store.dispatch(SEND_MESSAGE, {
           toId: this.id,
           fromId: this.self._id,
+          fromAvatar: this.self.avatar,
+          fromName: this.self.name,
           message: payload.text,
         });
       }
