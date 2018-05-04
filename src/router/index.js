@@ -64,8 +64,16 @@ const router = new Router({
 
     // 聊天界面路由
     {
-      path: '/talk/:uid',
+      path: '/talk/:id',
       name: 'Conserse',
+      component: Converse,
+      props: true,
+      meta: { requiresAuth: true },
+    },
+
+    {
+      path: '/group/:id',
+      name: 'Group',
       component: Converse,
       props: true,
       meta: { requiresAuth: true },

@@ -203,7 +203,7 @@ module.exports = {
 
   async findUserGroups(uid) {
     let db = await getDB(COL_GROUP_USERS);
-    const res = await db.col.find({ uid }).toArray();
+    const res = await db.col.find({ uid: new ObjectID(uid) }).toArray();
     const ids = res.map(item => item.gid);
     db.client.close();
     db = await getDB(COL_GROUPS);

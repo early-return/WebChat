@@ -43,7 +43,6 @@ export default {
         friend = this.$store.getters.getUnknownFriendByUID(id);
         return `${friend.name}(陌生人)`;
       }
-
       return friend.name;
     },
   },

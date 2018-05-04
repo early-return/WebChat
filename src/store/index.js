@@ -18,6 +18,9 @@ import {
   NOTICE_TYPE,
   OPERATION_BOX_SHOWING,
   OPERATION_BOX_PAYLOAD,
+  GROUPS,
+  GROUP_MESSAGES,
+  GROUP_MESSAGE,
 } from '@/types/mutation-types';
 import {
   INITIALIZE,
@@ -27,11 +30,16 @@ import {
   LOGIN,
   LOGOUT,
   SEND_MESSAGE,
+  SEND_GROUP_MESSAGE,
   REGISTER,
   CHECK_USER,
   SHOW_NOTICE,
   SHOW_OPERATION_BOX,
   ADD_FRIEND,
+  FETCH_GROUPS,
+  FECTH_GROUPS_MESSAGES,
+  ADD_GROUP,
+  CREATE_GROUP,
 } from '@/types/action-types';
 
 Vue.use(Vuex);
@@ -62,6 +70,12 @@ const store = new Vuex.Store({
     // 陌生好友列表
     unknownFriends: [],
 
+    // 群组列表
+    groups: [],
+
+    // 群消息列表
+    groupMessages: {},
+
     // 提示信息相关
     noticeMessage: 'This is a error!',
     noticeShowing: false,
@@ -76,10 +90,15 @@ const store = new Vuex.Store({
   getters: {
     isInitialized: state => state.initialized,
     self: state => state.self,
-    getMessagesByUID: state => uid => state.allMessages[`${uid}`],
+    getMessagesByUID: state => uid => state.allMessages[uid],
+    getGroupMessagesByID: state => id => state.groupMessages[id],
     getFriendByUID: state => uid => state.friends.find(user => user._id === uid),
     getUnknownFriendByUID: state => uid => state.unknownFriends.find(user => user._id === uid),
+    getGroupByID: state => id => state.groups.find(group => group._id === id),
     recentMessages: state => Object.values(state.allMessages)
+      .map(messages => messages[0])
+      .sort((msg1, msg2) => msg1.date - msg2.date),
+    recentGroupMessages: state => Object.values(state.groupMessages)
       .map(messages => messages[0])
       .sort((msg1, msg2) => msg1.date - msg2.date),
   },
@@ -115,6 +134,19 @@ const store = new Vuex.Store({
     },
     [UNKNOWN_FRIENDS](state, friends) {
       state.unknownFriends = friends;
+    },
+    [GROUPS](state, groups) {
+      state.groups = groups;
+    },
+    [GROUP_MESSAGES](state, messages) {
+      state.groupMessages = messages;
+    },
+    [GROUP_MESSAGE](state, message) {
+      if (state.groupMessages[message.gid]) {
+        state.groupMessages[message.gid].push(message);
+      } else {
+        Vue.set(state.groupMessages, message.gid, message);
+      }
     },
     [FRIEND](state, friend) {
       state.friends.push(friend);
@@ -163,6 +195,8 @@ const store = new Vuex.Store({
             dispatch(FETCH_FRIENDS);
             dispatch(FETCH_UNKNOWN_FRIENDS);
             dispatch(FETCH_MESSAGES);
+            dispatch(FETCH_GROUPS);
+            dispatch(FECTH_GROUPS_MESSAGES);
           }
           commit(INITIALIZED, { status: true });
         }).catch(() => {
@@ -283,8 +317,41 @@ const store = new Vuex.Store({
           }
         });
     },
+    [FETCH_GROUPS]({ state, commit }) {
+      axios.get(`${baseUrl}/groups/${state.self._id}/${state.token}`)
+        .then((response) => {
+          commit(GROUPS, response.data.data);
+        });
+    },
+    [FECTH_GROUPS_MESSAGES]({ state, commit }) {
+      axios.get(`${baseUrl}/messages/group/${state.self._id}/${state.token}`)
+        .then((response) => {
+          commit(GROUP_MESSAGES, response.data.data);
+        });
+    },
+    [ADD_GROUP]({ state, dispatch }, gname) {
+      axios.post(`${baseUrl}/groups/join`, {
+        token: state.token,
+        uid: state.self._id,
+        gname,
+      }).then(() => {
+        dispatch(SHOW_NOTICE, { message: '已加入该群组！', type: 'success', timeout: 3000 });
+      });
+    },
+    [CREATE_GROUP]({ state, dispatch }, gname) {
+      axios.post(`${baseUrl}/groups/create`, {
+        token: state.token,
+        uid: state.self._id,
+        gname,
+      }).then(() => {
+        dispatch(SHOW_NOTICE, { message: '已成功创建该群组！', type: 'success', timeout: 3000 });
+      });
+    },
     [SEND_MESSAGE]({ state }, message) {
       socket.emit('message', { token: state.token, message });
+    },
+    [SEND_GROUP_MESSAGE]({ state }, message) {
+      socket.emit('group message', { token: state.token, message });
     },
     [CHECK_USER](_, email) {
       return new Promise((resolve, reject) => {
@@ -304,8 +371,23 @@ const store = new Vuex.Store({
   },
 });
 
+axios.interceptors.response.use((response) => {
+  if (!response.data.success) {
+    store.dispatch(SHOW_NOTICE, { message: response.data.message, type: 'error' });
+    return Promise.reject(new Error(response.data.err));
+  }
+  return response;
+}, (err) => {
+  store.dispatch(SHOW_NOTICE, { message: `服务器错误： ${err.message}`, type: 'error' });
+  Promise.reject(err);
+});
+
 socket.on('message', (data) => {
   store.commit(MESSAGE, data);
+});
+
+socket.on('group message', (data) => {
+  store.commit(GROUP_MESSAGE, data);
 });
 
 socket.on('info', (data) => {

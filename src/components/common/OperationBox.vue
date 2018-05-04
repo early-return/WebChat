@@ -59,11 +59,13 @@ export default {
 
   .operation-box-box {
     background-color: #fff;
-    padding: 10px 15px;
+    position: relative;
+    padding: 0;
+    border-radius: 4px;
     box-shadow: 2px 2px 2px rgba($color: #888, $alpha: 0.8);
 
     header {
-      margin-bottom: 20px;
+      margin: 20px 0;
       display: flex;
       justify-content: space-between;
 
@@ -71,11 +73,18 @@ export default {
         color: $blue;
         font-weight: bold;
         font-size: 20px;
-        margin-right: 10px;
+        border-left: 3px solid $blue;
+        padding: 10px;
       }
 
       .close-btn {
         padding: 5px;
+        width: 10px;
+        height: 20px;
+        line-height: 20px;
+        position: absolute;
+        right: 5px;
+        top: 0;
 
         &:hover {
           cursor: pointer;
@@ -84,6 +93,7 @@ export default {
     }
 
     main {
+      padding: 0 10px;
 
       input {
         box-sizing: border-box;
@@ -92,7 +102,7 @@ export default {
     }
 
     footer {
-      margin-top: 10px;
+      margin: 10px;
     }
   }
 }

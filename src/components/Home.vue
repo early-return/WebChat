@@ -39,6 +39,9 @@ export default {
     Navbar,
     UserInfo,
   },
+  mounted() {
+    this.active = this.$route.name;
+  },
   beforeRouteUpdate(to, from, next) {
     this.active = to.name;
     next();

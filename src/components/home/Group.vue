@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     messages() {
-      return this.$store.getters.recentMessages;
+      return this.$store.getters.recentGroupMessages;
     },
   },
   created() {

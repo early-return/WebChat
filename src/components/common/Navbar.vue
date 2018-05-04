@@ -52,6 +52,8 @@ import {
   LOGOUT,
   SHOW_OPERATION_BOX,
   ADD_FRIEND,
+  ADD_GROUP,
+  CREATE_GROUP,
 } from '@/types/action-types';
 
 
@@ -100,8 +102,8 @@ export default {
     addGroup() {
       this.$store.dispatch(SHOW_OPERATION_BOX, {
         title: '请输入想要加入的群组名称',
-        callback: () => {
-
+        callback: (gname) => {
+          this.$store.dispatch(ADD_GROUP, gname);
         },
       });
       this.switchMenu();
@@ -109,8 +111,8 @@ export default {
     createGroup() {
       this.$store.dispatch(SHOW_OPERATION_BOX, {
         title: '请输入想要创建的群组名称',
-        callback: () => {
-
+        callback: (gname) => {
+          this.$store.dispatch(CREATE_GROUP, gname);
         },
       });
       this.switchMenu();

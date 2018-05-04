@@ -23,15 +23,17 @@ import UserInfo from '@/components/account/UserInfo';
 
 import {
   SEND_MESSAGE,
+  SEND_GROUP_MESSAGE,
 } from '@/types/action-types';
 
 
 export default {
   name: 'converse',
-  props: ['uid'],
+  props: ['id'],
   data() {
     return {
       unknown: false,
+      isGroup: false,
     };
   },
   mounted() {
@@ -43,26 +45,49 @@ export default {
       return this.$store.state.self;
     },
     friend() {
-      let friend = this.$store.getters.getFriendByUID(this.uid);
-      if (!friend) {
-        friend = this.$store.getters.getUnknownFriendByUID(this.uid);
-        this.unknown = true;
+      let friend;
+      if (!this.isGroup) {
+        friend = this.$store.getters.getFriendByUID(this.id);
+        if (!friend) {
+          friend = this.$store.getters.getUnknownFriendByUID(this.id);
+          this.unknown = true;
+        }
+      } else {
+        friend = this.$store.getters.getGroupByID(this.id);
+        friend.avatar = '/static/img/avatar/unknown.png';
       }
       return friend;
     },
     messages() {
-      return this.$store.getters.getMessagesByUID(this.uid);
+      let messages;
+      if (!this.isGroup) {
+        messages = this.$store.getters.getMessagesByUID(this.id);
+      } else {
+        messages = this.$store.getters.getGroupMessagesByID(this.id);
+      }
+      return messages;
     },
   },
   created() {
+    this.isGroup = this.$route.name === 'Group';
   },
   methods: {
     sendMessage(payload) {
-      this.$store.dispatch(SEND_MESSAGE, {
-        toId: this.uid,
-        fromId: this.self._id,
-        message: payload.text,
-      });
+      if (this.isGroup) {
+        this.$store.dispatch(SEND_GROUP_MESSAGE, {
+          gid: this.id,
+          fromId: this.self._id,
+          fromName: this.self.name,
+          fromAvatar: this.self.avatar,
+          message: payload.text,
+        });
+      } else {
+        this.$store.dispatch(SEND_MESSAGE, {
+          toId: this.id,
+          fromId: this.self._id,
+          message: payload.text,
+        });
+      }
     },
   },
   components: {
