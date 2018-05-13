@@ -1,5 +1,6 @@
 const mongo = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectId;
+// const util = require('./util');
 const config = require('./config');
 
 const COL_USERS = 'users';
@@ -11,6 +12,7 @@ const COL_GROUP_USERS = 'group_users';
 const COL_GROUP_MESSAGES = 'group_messages';
 const COL_STATUS = 'status';
 
+// `col`属性用于对数据库进行操作，`client`用于关闭数据库连接
 const getDB = async (colName) => {
   const client = await mongo.connect(config.mongoAddress);
   const db = client.db(config.mongoDbName);
@@ -181,7 +183,11 @@ module.exports = {
     const db = await getDB(COL_GROUPS);
     const res = await db.col.findOneAndUpdate(
       { _id: new ObjectID() },
-      { $set: { name, createdBy } },
+      { $set: {
+        name,
+        createdBy,
+        // avatar: util.randomAvatar(),
+      } },
       {
         returnOriginal: false,
         upsert: true,
@@ -258,7 +264,7 @@ module.exports = {
       },
     );
     db.client.close();
-    return res;
+    return res.value;
   },
 
   async findStatus(uid, skip, limit) {
@@ -267,8 +273,9 @@ module.exports = {
     const friends = await db.col.find({ fromUid: id }).toArray();
     const ids = friends.map(friend => friend.toUid);
     ids.push(id);
+    console.log(ids);
     db.client.close();
-    db = getDB(COL_STATUS);
+    db = await getDB(COL_STATUS);
     const res = db.col.find({ uid: { $in: ids } }).skip(skip).limit(limit).toArray();
     db.client.close();
     return res;

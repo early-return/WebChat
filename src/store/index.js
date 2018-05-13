@@ -9,7 +9,6 @@ import {
   SELF,
   INITIALIZED,
   FRIENDS,
-  UNKNOWN_FRIENDS,
   FRIEND,
   MESSAGES,
   MESSAGE,
@@ -27,7 +26,6 @@ import {
   INITIALIZE,
   FETCH_MESSAGES,
   FETCH_FRIENDS,
-  FETCH_UNKNOWN_FRIENDS,
   LOGIN,
   LOGOUT,
   SEND_MESSAGE,
@@ -66,9 +64,6 @@ const store = new Vuex.Store({
     // 好友列表
     friends: [],
 
-    // 陌生好友列表
-    unknownFriends: [],
-
     // 群组列表
     groups: [],
 
@@ -92,14 +87,13 @@ const store = new Vuex.Store({
     getMessagesByUID: state => uid => state.allMessages[uid],
     getGroupMessagesByID: state => id => state.groupMessages[id],
     getFriendByUID: state => uid => state.friends.find(user => user._id === uid),
-    getUnknownFriendByUID: state => uid => state.unknownFriends.find(user => user._id === uid),
     getGroupByID: state => id => state.groups.find(group => group._id === id),
     recentMessages: state => Object.values(state.allMessages)
       .map(messages => messages[0])
-      .sort((msg1, msg2) => msg1.date - msg2.date),
+      .sort((msg1, msg2) => new Date(msg2.date) - new Date(msg1.date)),
     recentGroupMessages: state => Object.values(state.groupMessages)
       .map(messages => messages[0])
-      .sort((msg1, msg2) => msg1.date - msg2.date),
+      .sort((msg1, msg2) => new Date(msg2.date) - new Date(msg1.date)),
   },
 
   mutations: {
@@ -130,9 +124,6 @@ const store = new Vuex.Store({
     },
     [FRIENDS](state, friends) {
       state.friends = friends;
-    },
-    [UNKNOWN_FRIENDS](state, friends) {
-      state.unknownFriends = friends;
     },
     [GROUPS](state, groups) {
       state.groups = groups;
@@ -199,7 +190,6 @@ const store = new Vuex.Store({
             commit(SELF, response.data.data);
             socket.emit('auth', { token: state.token, uid: state.self._id });
             dispatch(FETCH_FRIENDS);
-            dispatch(FETCH_UNKNOWN_FRIENDS);
             dispatch(FETCH_MESSAGES);
             dispatch(FETCH_GROUPS);
             dispatch(FECTH_GROUPS_MESSAGES);
@@ -308,16 +298,6 @@ const store = new Vuex.Store({
         .then((response) => {
           if (response.data.success) {
             commit(FRIENDS, response.data.data);
-          } else {
-            dispatch(SHOW_NOTICE, { message: response.data.message, type: 'error' });
-          }
-        });
-    },
-    [FETCH_UNKNOWN_FRIENDS]({ state, commit, dispatch }) {
-      axios.get(`${baseUrl}/friends/unknown/${state.self._id}/${state.token}`)
-        .then((response) => {
-          if (response.data.success) {
-            commit(UNKNOWN_FRIENDS, response.data.data);
           } else {
             dispatch(SHOW_NOTICE, { message: response.data.message, type: 'error' });
           }
