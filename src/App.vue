@@ -58,9 +58,12 @@ export default {
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
 html,
 body {
   height: 100vh;
+  font-family: 'Source Sans Pro', 'Deng', 'Microsoft Yahei', 'SimHei', sans-serif;
 }
 body {
   padding: 0;
@@ -93,10 +96,12 @@ input[type="password"] {
   padding: 5px 10px;
   background-color: $white;
   font-size: 1rem;
+  color: #444;
   border-radius: 16px;
   border: 1px solid darken($lightgray, 20%);
   outline: none;
   transition: border 0.3s;
+  font-family: inherit;
 
   &:focus {
     border: 1px solid $lightblue;
