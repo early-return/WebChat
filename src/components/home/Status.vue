@@ -15,6 +15,10 @@
         <div class="status-content">{{ status.content }}</div>
       </main>
     </div>
+    <div class="status-item loading-more" v-if="hasMore" @click="fetchMore">
+      <aside></aside>
+      <main>{{ loading ? '正在加载...' : '加载更多' }}</main>
+    </div>
   </div>
 </template>
 
@@ -32,6 +36,7 @@ export default {
       statusList: [],
       currentPage: 1,
       perPageCount: 10,
+      loading: true,
       hasMore: true,
     };
   },
@@ -68,17 +73,20 @@ export default {
       this.statusText = '';
     },
     fetchMore() {
+      const vm = this;
+      vm.loading = true;
       const skip = (this.currentPage - 1) * this.perPageCount;
       const limit = this.perPageCount;
       const uid = this.self._id;
       const token = this.$store.state.token;
-      this.$http.get(`${cfg.serverAddress}/api/status/${skip}/${limit}/${uid}/${token}`)
+      vm.$http.get(`${cfg.serverAddress}/api/status/${skip}/${limit}/${uid}/${token}`)
         .then((resp) => {
           if (resp.data.data.length < 10) {
-            this.hasMore = false;
+            vm.hasMore = false;
           }
-          this.statusList.unshift(...resp.data.data);
-          this.currentPage += 1;
+          vm.statusList.push(...resp.data.data);
+          vm.currentPage += 1;
+          vm.loading = false;
         });
     },
   },
@@ -87,6 +95,8 @@ export default {
 
 <style lang="scss" scoped>
 .status-list {
+  margin-bottom: 10px;
+
   .status-item {
     display: flex;
     flex-direction: row;
@@ -135,6 +145,13 @@ export default {
         margin-top: 5px;
         margin-bottom: 10px;
       }
+    }
+  }
+  .loading-more {
+    cursor: pointer;
+
+    main {
+      align-items: center;
     }
   }
 }

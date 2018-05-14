@@ -252,7 +252,7 @@ module.exports = {
     return res;
   },
 
-  // 状态相关
+  // 动态相关
   async addStatus(status) {
     const db = await getDB(COL_STATUS);
     const res = await db.col.findOneAndUpdate(
@@ -275,7 +275,9 @@ module.exports = {
     ids.push(id);
     db.client.close();
     db = await getDB(COL_STATUS);
-    const res = db.col.find({ uid: { $in: ids } }).skip(skip).limit(limit).toArray();
+    const res = db.col.find({ uid: { $in: ids } })
+      .sort({ date: -1 }).skip(skip).limit(limit)
+      .toArray();
     db.client.close();
     return res;
   },
