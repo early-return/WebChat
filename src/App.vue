@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <notice-bar></notice-bar>
+    <notice-bar class="notice-bar"></notice-bar>
     <main>
       <router-view></router-view>
     </main>
@@ -139,6 +139,7 @@ input[type="password"] {
   flex-direction: column;
 
   .notice-bar {
+    z-index: 1200;
     flex: 0 0 auto;
   }
 
@@ -147,7 +148,7 @@ input[type="password"] {
   }
 
   .operation-box {
-    z-index: 1001;
+    z-index: 1100;
     position: fixed;
     top: 0;
     left: 0;

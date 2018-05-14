@@ -55,6 +55,7 @@ import {
   ADD_GROUP,
   CREATE_GROUP,
 } from '@/types/action-types';
+import util from '@/util';
 
 
 export default {
@@ -93,6 +94,8 @@ export default {
     addFriend() {
       this.$store.dispatch(SHOW_OPERATION_BOX, {
         title: '请输入想要添加的好友的邮箱',
+        validate: util.validateEmail,
+        message: '请输入正确的邮箱地址！',
         callback: (email) => {
           this.$store.dispatch(ADD_FRIEND, email);
         },
@@ -102,6 +105,8 @@ export default {
     addGroup() {
       this.$store.dispatch(SHOW_OPERATION_BOX, {
         title: '请输入想要加入的群组名称',
+        validate: util.validateName,
+        message: '名称只能包含汉字、字母、数字与下划线！',
         callback: (gname) => {
           this.$store.dispatch(ADD_GROUP, gname);
         },
@@ -111,6 +116,8 @@ export default {
     createGroup() {
       this.$store.dispatch(SHOW_OPERATION_BOX, {
         title: '请输入想要创建的群组名称',
+        validate: util.validateName,
+        message: '名称只能包含汉字、字母、数字与下划线！',
         callback: (gname) => {
           this.$store.dispatch(CREATE_GROUP, gname);
         },

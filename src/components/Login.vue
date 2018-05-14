@@ -23,6 +23,7 @@ import {
   SHOW_NOTICE,
 } from '@/types/action-types';
 import TitleBar from '@/components/common/TitleBar';
+import util from '@/util';
 
 export default {
   name: 'login',
@@ -60,17 +61,18 @@ export default {
     action() {
       const vm = this;
       if (!vm.validateEmail()) return;
+      if (vm.status === 'register') {
+        if (!vm.validateName()) {
+          return;
+        }
+      }
       if (vm.status === 'login' || vm.status === 'register') {
-        if (!vm.password || vm.password === '') {
+        if (!vm.password) {
           vm.warn('请输入密码！');
           return;
         }
       }
       if (vm.status === 'register') {
-        if (!vm.name || vm.password === '') {
-          vm.warn('请输入名称！');
-          return;
-        }
         if (vm.password !== vm.rePassword) {
           vm.warn('两次密码输入不一致！');
           return;
@@ -125,13 +127,24 @@ export default {
     },
     validateEmail() {
       const email = this.email;
-      if (!email || email === '') {
+      if (!email) {
         this.warn('请输入邮箱地址！');
         return false;
       }
-      const reg = /.+@.+\..+/;
-      if (!reg.test(email)) {
+      if (!util.validateEmail(this.email)) {
         this.warn('请输入正确的邮箱地址！');
+        return false;
+      }
+      return true;
+    },
+    validateName() {
+      const name = this.name;
+      if (!name) {
+        this.warn('请输入名称！');
+        return false;
+      }
+      if (!util.validateName(this.name)) {
+        this.warn('名称只能包含汉字、字母、数字与下划线，且长度在1~15之间！');
         return false;
       }
       return true;

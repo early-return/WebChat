@@ -17,6 +17,9 @@
 import {
   OPERATION_BOX_SHOWING,
 } from '@/types/mutation-types';
+import {
+  SHOW_NOTICE,
+} from '@/types/action-types';
 
 export default {
   name: 'operation-box',
@@ -35,6 +38,10 @@ export default {
   },
   methods: {
     onCallback() {
+      if (!this.payload.validate(this.text)) {
+        this.$store.dispatch(SHOW_NOTICE, { message: this.payload.message, type: 'error' });
+        return;
+      }
       if (this.payload.callback) {
         this.payload.callback(this.text);
       }
