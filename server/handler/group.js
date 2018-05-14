@@ -7,7 +7,7 @@ const processCreateGroup = async (token, uid, gname) => {
   if (group) {
     throw new Error('已存在同名群组！');
   }
-  const res = await db.addGroup(gname, uid);
+  const res = await db.addGroup(gname, uid, util.randomAvatar());
   await db.addGroupsUser(res.value._id, uid);
   return res.value;
 };

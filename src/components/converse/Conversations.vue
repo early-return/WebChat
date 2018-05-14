@@ -49,7 +49,7 @@ export default {
     },
     getAvatar(msg) {
       if (this.isGroup) {
-        return '/static/img/avatar/unknown.png';
+        return this.$store.getters.getGroupByID(msg.toId).avatar;
       }
       const friend = this.$store.getters.getFriendByID(msg.session);
       if (friend) {

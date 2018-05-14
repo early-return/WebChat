@@ -6,7 +6,7 @@
     </router-link>
     <div class="title">群组</div>
     <router-link class="friend" v-for="group in groups" :key="group._id" :to="`/group/${group._id}`">
-      <img class="avatar" src="/static/img/avatar/unknown.png"><div class="name">{{ group.name }}</div>
+      <img class="avatar" :src="group.avatar"><div class="name">{{ group.name }}</div>
     </router-link>
   </div>
 </template>

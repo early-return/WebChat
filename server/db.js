@@ -178,7 +178,7 @@ module.exports = {
   },
 
   // 群组相关
-  async addGroup(name, createdBy) {
+  async addGroup(name, createdBy, avatar) {
     createdBy = new ObjectID(createdBy);
     const db = await getDB(COL_GROUPS);
     const res = await db.col.findOneAndUpdate(
@@ -186,7 +186,7 @@ module.exports = {
       { $set: {
         name,
         createdBy,
-        // avatar: util.randomAvatar(),
+        avatar,
       } },
       {
         returnOriginal: false,
