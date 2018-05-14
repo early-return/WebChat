@@ -1,9 +1,9 @@
 <template>
-  <div class="converse">
-    <title-bar class="title-bar" :title="`与 ${unknown ? '陌生人(' + friend.name + ')' : friend.name} 的聊天`" canBack></title-bar>
+  <div class="session">
+    <title-bar class="title-bar" :title="title" canBack></title-bar>
     <main class="container">
       <aside class="user-info">
-        <user-info :user="friend"></user-info>
+        <user-info :user="aside" :infos="aside.infos"></user-info>
       </aside>
       <main class="content-container">
         <div class="content">
@@ -21,19 +21,17 @@ import InputBar from '@/components/common/InputBar';
 import TitleBar from '@/components/common/TitleBar';
 import UserInfo from '@/components/account/UserInfo';
 
-import {
-  SEND_MESSAGE,
-  SEND_GROUP_MESSAGE,
-} from '@/types/action-types';
-
 
 export default {
-  name: 'converse',
-  props: ['id'],
+  name: 'session',
+  props: [
+    'id',
+    'title',
+    'messages',
+    'aside',
+  ],
   data() {
     return {
-      unknown: false,
-      isGroup: false,
     };
   },
   mounted() {
@@ -44,52 +42,16 @@ export default {
     self() {
       return this.$store.state.self;
     },
-    friend() {
-      let friend;
-      if (!this.isGroup) {
-        friend = this.$store.getters.getFriendByUID(this.id);
-        if (!friend) {
-          friend = this.$store.getters.getUnknownFriendByUID(this.id);
-          this.unknown = true;
-        }
-      } else {
-        friend = this.$store.getters.getGroupByID(this.id);
-        friend.avatar = '/static/img/avatar/unknown.png';
-      }
-      return friend;
-    },
-    messages() {
-      let messages;
-      if (!this.isGroup) {
-        messages = this.$store.getters.getMessagesByUID(this.id);
-      } else {
-        messages = this.$store.getters.getGroupMessagesByID(this.id);
-      }
-      return messages;
-    },
-  },
-  created() {
-    this.isGroup = this.$route.name === 'Group';
   },
   methods: {
     sendMessage(payload) {
-      if (this.isGroup) {
-        this.$store.dispatch(SEND_GROUP_MESSAGE, {
-          gid: this.id,
-          fromId: this.self._id,
-          fromName: this.self.name,
-          fromAvatar: this.self.avatar,
-          message: payload.text,
-        });
-      } else {
-        this.$store.dispatch(SEND_MESSAGE, {
-          toId: this.id,
-          fromId: this.self._id,
-          fromAvatar: this.self.avatar,
-          fromName: this.self.name,
-          message: payload.text,
-        });
-      }
+      this.$emit('send', {
+        toId: this.id,
+        fromId: this.self._id,
+        fromAvatar: this.self.avatar,
+        fromName: this.self.name,
+        message: payload.text,
+      });
     },
   },
   components: {
@@ -139,7 +101,7 @@ main.container {
     }
   }
 }
-.converse {
+.session {
   height: 100vh;
   flex-grow: 0;
   display: flex;

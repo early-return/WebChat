@@ -41,8 +41,8 @@ export default {
       if (this.isGroup) {
         return this.$store.getters.getGroupByID(msg.gid).name;
       }
-      if (this.$store.getters.getFriendByUID(msg.session)) {
-        return this.$store.getters.getFriendByUID(msg.session).name;
+      if (this.$store.getters.getFriendByID(msg.session)) {
+        return this.$store.getters.getFriendByID(msg.session).name;
       }
       return this.$store.getters.getMessagesByUID(msg.session)
         .find(message => message.fromId !== this.self._id).fromName;
@@ -51,7 +51,7 @@ export default {
       if (this.isGroup) {
         return '/static/img/avatar/unknown.png';
       }
-      const friend = this.$store.getters.getFriendByUID(msg.session);
+      const friend = this.$store.getters.getFriendByID(msg.session);
       if (friend) {
         return friend.avatar;
       }
@@ -62,7 +62,7 @@ export default {
       if (this.isGroup) {
         return true;
       }
-      if (this.$store.getters.getFriendByUID(uid)) {
+      if (this.$store.getters.getFriendByID(uid)) {
         return true;
       }
       return false;

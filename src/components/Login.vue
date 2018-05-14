@@ -8,7 +8,7 @@
       <input type='text' placeholder="请输入您的名字" v-model="name" v-show="status === 'register'">
       <input type="password" v-show="status === 'login' || status === 'register'" placeholder="请输入您的密码" v-model="password">
       <input type="password" placeholder="请再次输入您的密码" v-show="status === 'register'" v-model="rePassword">
-      <a class="btn" href="#" @click="action">{{ button }}</a>
+      <a class="btn" href="#" @click="action">{{ button }}</a> 
     </div>
 
   </div>

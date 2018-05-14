@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
-import Converse from '@/components/converse/Converse';
+import FriendSession from '@/components/converse/FriendSession';
+import GroupSession from '@/components/converse/GroupSession';
 import Home from '@/components/Home';
 import Chat from '@/components/home/Chat';
 import Group from '@/components/home/Group';
@@ -65,16 +66,16 @@ const router = new Router({
     // 聊天界面路由
     {
       path: '/talk/:id',
-      name: 'Conserse',
-      component: Converse,
+      name: 'FriendSession',
+      component: FriendSession,
       props: true,
       meta: { requiresAuth: true },
     },
 
     {
       path: '/group/:id',
-      name: 'Group',
-      component: Converse,
+      name: 'GroupSession',
+      component: GroupSession,
       props: true,
       meta: { requiresAuth: true },
     },

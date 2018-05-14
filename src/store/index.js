@@ -85,8 +85,8 @@ const store = new Vuex.Store({
     isInitialized: state => state.initialized,
     self: state => state.self,
     getMessagesByUID: state => uid => state.allMessages[uid],
-    getGroupMessagesByID: state => id => state.groupMessages[id],
-    getFriendByUID: state => uid => state.friends.find(user => user._id === uid),
+    getGroupMessagesByUID: state => id => state.groupMessages[id],
+    getFriendByID: state => uid => state.friends.find(user => user._id === uid),
     getGroupByID: state => id => state.groups.find(group => group._id === id),
     recentMessages: state => Object.values(state.allMessages)
       .map(messages => messages[0])
