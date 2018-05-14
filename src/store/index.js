@@ -135,10 +135,10 @@ const store = new Vuex.Store({
       state.groupMessages = messages;
     },
     [GROUP_MESSAGE](state, message) {
-      if (state.groupMessages[message.gid]) {
-        state.groupMessages[message.gid].unshift(message);
+      if (state.groupMessages[message.toId]) {
+        state.groupMessages[message.toId].unshift(message);
       } else {
-        Vue.set(state.groupMessages, message.gid, [message]);
+        Vue.set(state.groupMessages, message.toId, [message]);
       }
     },
     [FRIEND](state, friend) {
@@ -375,7 +375,6 @@ socket.on('message', (data) => {
 });
 
 socket.on('group message', (data) => {
-  console.log('on group message: ', data);
   store.commit(GROUP_MESSAGE, data);
 });
 

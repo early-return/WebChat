@@ -236,7 +236,7 @@ module.exports = {
 
   // 群消息相关
   async addGroupMessage(msg) {
-    msg.gid = new ObjectID(msg.gid);
+    msg.toId = new ObjectID(msg.toId);
     msg.fromId = new ObjectID(msg.fromId);
     const db = await getDB(COL_GROUP_MESSAGES);
     const res = await db.col.insertOne(msg);

@@ -32,13 +32,13 @@ const processGetGroupMessages = async (token, uid) => {
   await util.auth(token, uid);
   const res = await db.findUserGroups(uid);
   const ids = res.map(item => item._id);
-  const doc = await db.findGroupMessages({ gid: { $in: ids } });
+  const doc = await db.findGroupMessages({ toId: { $in: ids } });
   const data = {};
   doc.forEach((message) => {
-    if (data[message.gid]) {
-      data[message.gid].push(message);
+    if (data[message.toId]) {
+      data[message.toId].push(message);
     } else {
-      data[message.gid] = [message];
+      data[message.toId] = [message];
     }
   });
   return data;

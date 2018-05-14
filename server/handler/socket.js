@@ -30,7 +30,7 @@ const sendGroupMessage = async (data) => {
   msg.date = new Date();
   await util.auth(data.token, msg.fromId);
   await db.addGroupMessage(msg);
-  const ids = await db.findGroupUsersId(msg.gid);
+  const ids = await db.findGroupUsersId(msg.toId);
   ids.forEach((id) => {
     if (socketMap.has(id.toString())) {
       const socket = socketMap.get(id.toString());

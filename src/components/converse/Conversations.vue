@@ -1,7 +1,7 @@
 <template>
   <main class="messages-container">
     <div class="messages">
-      <router-link class="message" :to="`/${isGroup ? 'group/' + msg.gid : 'talk/' + msg.session}`" href="#" v-for="msg in messages" :key="msg._id">
+      <router-link class="message" :to="`/${isGroup ? 'group/' + msg.toId : 'talk/' + msg.session}`" href="#" v-for="msg in messages" :key="msg._id">
         <img class="avatar" :src="getAvatar(msg)">
         <div class="desc">
           <div class="nickname">{{ getFriendName(msg) }}<div class="unknown" v-if="!isKnown(msg.session)">陌生人</div></div>
@@ -39,7 +39,7 @@ export default {
     },
     getFriendName(msg) {
       if (this.isGroup) {
-        return this.$store.getters.getGroupByID(msg.gid).name;
+        return this.$store.getters.getGroupByID(msg.toId).name;
       }
       if (this.$store.getters.getFriendByID(msg.session)) {
         return this.$store.getters.getFriendByID(msg.session).name;
