@@ -5,6 +5,10 @@
 </template>
 
 <script>
+import {
+  SHOW_NOTICE,
+} from '@/types/action-types';
+
 export default {
   name: 'input-bar',
   props: ['button'],
@@ -15,6 +19,10 @@ export default {
   },
   methods: {
     post() {
+      if (this.text.length < 1) {
+        this.$store.dispatch(SHOW_NOTICE, { message: '请输入消息内容', type: 'warning', timeout: 3000 });
+        return;
+      }
       this.$emit('post', { text: this.text });
       this.text = '';
     },

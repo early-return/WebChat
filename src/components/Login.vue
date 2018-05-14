@@ -1,17 +1,17 @@
 <template>
 
-<div class="login">
-  <title-bar title="欢迎使用"></title-bar>
+  <div class="login">
+    <title-bar title="欢迎使用"></title-bar>
 
-  <div class="login-form">
-    <input type="email" placeholder="请输入您的邮箱" v-model="email">
-    <input type='text' autofocus placeholder="请输入您的名字" v-model="name" v-show="status === 'register'">
-    <input type="password" autofocus v-show="status === 'login' || status === 'register'" placeholder="请输入您的密码" v-model="password">
-    <input type="password" placeholder="请再次输入您的密码" v-show="status === 'register'" v-model="rePassword">
-    <a class="btn" href="#" @click="action">{{ button }}</a>
+    <div class="login-form">
+      <input type="email" placeholder="请输入您的邮箱" v-model="email">
+      <input type='text' placeholder="请输入您的名字" v-model="name" v-show="status === 'register'">
+      <input type="password" v-show="status === 'login' || status === 'register'" placeholder="请输入您的密码" v-model="password">
+      <input type="password" placeholder="请再次输入您的密码" v-show="status === 'register'" v-model="rePassword">
+      <a class="btn" href="#" @click="action">{{ button }}</a>
+    </div>
+
   </div>
-
-</div>
 
 </template>
 
@@ -59,45 +59,85 @@ export default {
   methods: {
     action() {
       const vm = this;
+      if (!vm.validateEmail()) return;
+      if (vm.status === 'login' || vm.status === 'register') {
+        if (!vm.password || vm.password === '') {
+          vm.warn('请输入密码！');
+          return;
+        }
+      }
+      if (vm.status === 'register') {
+        if (!vm.name || vm.password === '') {
+          vm.warn('请输入名称！');
+          return;
+        }
+        if (vm.password !== vm.rePassword) {
+          vm.warn('两次密码输入不一致！');
+          return;
+        }
+      }
       const preStatus = vm.status;
       vm.status = 'waiting';
       if (preStatus === 'initial') {
-        vm.$store.dispatch(CHECK_USER, vm.email)
-          .then((result) => {
-            if (result === 'exist') {
-              vm.status = 'login';
-            } else {
-              vm.status = 'register';
-            }
-          });
+        this.init();
       } else if (preStatus === 'login') {
-        vm.$store.dispatch(LOGIN, {
-          email: vm.email,
-          password: vm.password,
-        }).then(() => {
-          vm.loginSuccess();
-        }).catch(() => {
-          vm.status = 'initial';
-        });
+        this.login();
       } else if (preStatus === 'register') {
-        if (vm.password !== vm.rePassword) {
-          vm.$store.dispatch(SHOW_NOTICE, { message: '两次输入的密码不一致', type: 'warning', timeout: 3000 });
-          vm.status = 'register';
-        } else {
-          vm.$store.dispatch(REGISTER, {
-            email: vm.email,
-            name: vm.name,
-            password: vm.password,
-          }).then(() => {
-            vm.loginSuccess();
-          }).catch((err) => {
-            vm.errorMessage = err;
-          });
-        }
+        this.register();
       }
+    },
+    init() {
+      const vm = this;
+      vm.$store.dispatch(CHECK_USER, vm.email)
+        .then((result) => {
+          if (result === 'exist') {
+            vm.status = 'login';
+          } else {
+            vm.status = 'register';
+          }
+        });
+    },
+    login() {
+      const vm = this;
+      vm.$store.dispatch(LOGIN, {
+        email: vm.email,
+        password: vm.password,
+      }).then(() => {
+        vm.loginSuccess();
+      }).catch(() => {
+        vm.status = 'initial';
+      });
+    },
+    register() {
+      const vm = this;
+      vm.$store.dispatch(REGISTER, {
+        email: vm.email,
+        name: vm.name,
+        password: vm.password,
+      }).then(() => {
+        vm.loginSuccess();
+      }).catch((err) => {
+        vm.errorMessage = err;
+      });
     },
     loginSuccess() {
       this.$router.replace('/chat');
+    },
+    validateEmail() {
+      const email = this.email;
+      if (!email || email === '') {
+        this.warn('请输入邮箱地址！');
+        return false;
+      }
+      const reg = /.+@.+\..+/;
+      if (!reg.test(email)) {
+        this.warn('请输入正确的邮箱地址！');
+        return false;
+      }
+      return true;
+    },
+    warn(message) {
+      this.$store.dispatch(SHOW_NOTICE, { message, type: 'warning', timeout: 3000 });
     },
   },
   components: {

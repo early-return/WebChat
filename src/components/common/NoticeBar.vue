@@ -56,6 +56,7 @@ export default {
     }
     .close-btn {
       flex: 0 0 auto;
+      cursor: pointer;
     }
   }
 

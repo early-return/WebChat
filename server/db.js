@@ -273,7 +273,6 @@ module.exports = {
     const friends = await db.col.find({ fromUid: id }).toArray();
     const ids = friends.map(friend => friend.toUid);
     ids.push(id);
-    console.log(ids);
     db.client.close();
     db = await getDB(COL_STATUS);
     const res = db.col.find({ uid: { $in: ids } }).skip(skip).limit(limit).toArray();
