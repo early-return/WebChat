@@ -38,19 +38,17 @@ export default {
       return this.$store.state.self;
     },
   },
-  mounted() {
-
-  },
   methods: {
   },
   watch: {
     // 监听是否已初始化及初始化后应跳转的页面
     initialized() {
       if (this.$store.getters.isInitialized) {
-        if (this.$store.getters.self) {
-          this.$router.replace('/chat');
-        } else {
+        if (!this.$store.getters.self) {
           this.$router.replace('/login');
+        }
+        if (this.$route.path === '/') {
+          this.$router.replace('/chat');
         }
       }
     },

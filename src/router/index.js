@@ -104,7 +104,7 @@ const router = new Router({
 // 检查将要跳转的路由是否需要认证，如需要认证且当前没有认证即跳转到登陆界面
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.getters.self) {
+    if (store.getters.isInitialized && !store.getters.self) {
       next({
         path: '/login',
       });

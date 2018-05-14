@@ -63,6 +63,6 @@ module.exports = {
   getGroupMessages(req, res) {
     processGetGroupMessages(req.params.token, req.params.uid)
       .then(data => res.json(util.resp(true, '', data)))
-      .catch(err => res.josn(util.ress(false, err.message, err.toString())));
+      .catch(err => res.josn(util.resp(false, err.message, err.toString())));
   },
 };
