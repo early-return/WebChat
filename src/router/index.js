@@ -11,6 +11,7 @@ import Friends from '@/components/home/Friends';
 import FriendAdd from '@/components/account/FriendAdd';
 import Waiting from '@/components/Waiting';
 import Login from '@/components/Login';
+import Profile from '@/components/account/Profile';
 
 
 Vue.use(Router);
@@ -92,7 +93,7 @@ const router = new Router({
       path: '/profile',
       name: 'Profile',
       meta: { requiresAuth: true },
-      // TODO: 添加路由对应组件
+      component: Profile,
     },
     {
       path: '/user/:uid',

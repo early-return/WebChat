@@ -42,12 +42,14 @@ const processCheckEmail = async (email) => {
 };
 
 const processUpdateUser = async (user, token) => {
+  console.log(user);
   await util.auth(token, user._id);
-  const users = await db.findUser({ emai: user.email });
-  if (users.length > 0) {
-    throw new Error('该邮箱已被注册！');
+  const users = await db.findUser({ email: user.email });
+  if (users.length < 1) {
+    throw new Error('系统出错');
   }
   const doc = await db.updateUser(user);
+  console.log(doc);
   return util.resp(true, '', doc.value);
 };
 
@@ -107,7 +109,6 @@ module.exports = {
 
   updateProfile(req, res) {
     const user = req.body.data;
-    user.password = util.genpass(user.password);
 
     processUpdateUser(user, req.body.token)
       .then(data => res.json(data))

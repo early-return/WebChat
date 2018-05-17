@@ -22,9 +22,12 @@
       <div class="menu">
         <font-awesome-icon class="menu-icon" @click="switchMenu" :icon="menuIcon" />
         <div class="menu-content" v-if="showingMenu">
+          <div @click="showProfile" class="menu-item">我的信息</div>
+          <hr>
           <div @click="addFriend" class="menu-item">添加好友</div>
           <div @click="addGroup" class="menu-item">加入群组</div>
           <div @click="createGroup" class="menu-item">创建群组</div>
+          <hr>
           <div @click="logout" class="menu-item">登出账号</div>
         </div>
       </div>
@@ -86,6 +89,10 @@ export default {
   methods: {
     switchMenu() {
       this.showingMenu = !this.showingMenu;
+    },
+    showProfile() {
+      this.$router.push('/profile');
+      this.switchMenu();
     },
     logout() {
       this.$store.dispatch(LOGOUT)
@@ -185,12 +192,19 @@ export default {
         text-align: center;
         background-color: #fff;
         padding: 10px 15px;
-        border-top: 1px olid #EEE;
+        border-top: 1px olid #eee;
         color: #66757f;
 
         &:hover {
           cursor: pointer;
         }
+      }
+
+      hr {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+        border: 1px solid #eee;
       }
     }
   }
@@ -229,6 +243,5 @@ export default {
   color: $active;
   border-bottom-color: $active;
 }
-
 </style>
 
