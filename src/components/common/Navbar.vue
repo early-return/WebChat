@@ -180,7 +180,7 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      box-shadow: 0px 0px 1px #666;
+      box-shadow: 0px 0px 5px rgba(150, 150, 150, 0.8);
       top: 45px;
       right: 0;
 

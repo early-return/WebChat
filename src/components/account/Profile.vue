@@ -9,6 +9,7 @@
           <button class="btn" @click="save">保存</button>
         </aside>
         <main>
+          <h3>个人信息</h3>
           <div class="profile-item">
             <label for="name">名字：</label>
             <input type="text" id="name" v-model="self.name" @change="onChange" :disabled="notEditing">
@@ -25,7 +26,22 @@
             <label for="bio">简介：</label>
             <div class="textarea" id="bio" @change="onChange" :contenteditable="!notEditing">{{ self.bio ? self.bio : '这家伙很懒，啥都没写。' }}</div>
           </div>
-
+          <h3>密码修改</h3>
+          <div class="profile-item">
+            <label for="old">旧密码：</label>
+            <input type="password" id="old">
+          </div>
+          <div class="profile-item">
+            <label for="new">新密码：</label>
+            <input type="password" id="new">
+          </div>
+          <div class="profile-item">
+            <label for="re">重复新密码：</label>
+            <input type="password" id="re">
+          </div>
+          <div class="profile-item">
+            <button class="btn">修改密码</button>
+          </div>
         </main>
       </div>
 
@@ -36,6 +52,7 @@
 <script>
 import TitleBar from '@/components/common/TitleBar';
 import cfg from '@/config';
+import util from '@/util';
 import {
   SELF,
 } from '@/types/mutation-types';
@@ -60,6 +77,14 @@ export default {
       this.notEditing = !this.notEditing;
     },
     save() {
+      if (!util.validateName(this.self.name)) {
+        this.warn('名称只能包含汉字、字母、数字与下划线！');
+        return;
+      }
+      if (this.self.url && !/\w+\.[a-zA-Z]+/.test(this.self.url)) {
+        this.warn('主页地址格式不正确！');
+        return;
+      }
       const bio = document.querySelector('#bio').textContent;
       if (!this.changed && bio === this.self.bio) {
         this.$store.dispatch(SHOW_NOTICE, { message: '你还没有更改过你的资料哦！', type: 'warning', timeout: 3000 });
@@ -79,6 +104,9 @@ export default {
     onChange() {
       this.changed = true;
     },
+    warn(notice) {
+      this.$store.dispatch(SHOW_NOTICE, { message: notice, type: 'warning', timeout: 3000 });
+    },
   },
 
   components: {
@@ -91,7 +119,7 @@ export default {
 #email,
 .not-editing textarea,
 .not-editing .textarea,
-.not-editing input[type=url],
+.not-editing input[type="url"],
 .not-editing input[type="text"] {
   border-color: transparent;
   background-color: transparent;
@@ -110,7 +138,7 @@ export default {
 
     .avatar {
       border-radius: 50%;
-      margin: 10px;
+      margin: 30px;
       width: 200px;
       height: 200px;
     }
@@ -143,8 +171,8 @@ export default {
       .avatar {
         width: 100px;
         height: 100px;
+        margin: 10px;
       }
-
     }
   }
 }

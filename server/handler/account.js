@@ -42,14 +42,12 @@ const processCheckEmail = async (email) => {
 };
 
 const processUpdateUser = async (user, token) => {
-  console.log(user);
   await util.auth(token, user._id);
   const users = await db.findUser({ email: user.email });
   if (users.length < 1) {
     throw new Error('系统出错');
   }
   const doc = await db.updateUser(user);
-  console.log(doc);
   return util.resp(true, '', doc.value);
 };
 
