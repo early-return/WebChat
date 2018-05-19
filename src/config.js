@@ -1,4 +1,4 @@
 export default {
-  serverAddress: 'http://192.168.31.179:3000',
-  socketAddress: 'http://192.168.31.179:3000',
+  serverAddress: 'http://63.209.33.171:3000',
+  socketAddress: 'http://63.209.33.171:3000',
 };

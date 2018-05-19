@@ -36,6 +36,7 @@ module.exports = {
     const db = await getDB(COL_USERS);
 
     const set = {};
+    if (user.email) set.email = user.email;
     if (user.name) set.name = user.name;
     if (user.avatar) set.avatar = user.avatar;
     if (user.bio) set.bio = user.bio;
