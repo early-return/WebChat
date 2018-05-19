@@ -39,6 +39,7 @@ module.exports = {
     if (user.email) set.email = user.email;
     if (user.name) set.name = user.name;
     if (user.avatar) set.avatar = user.avatar;
+    if (user.password) set.password = user.password;
     if (user.bio) set.bio = user.bio;
     if (user.url) set.url = user.url;
 

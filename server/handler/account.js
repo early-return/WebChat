@@ -48,6 +48,7 @@ const processUpdateUser = async (user, token) => {
     throw new Error('系统出错');
   }
   user.email = '';
+  user.password = '';
   const doc = await db.updateUser(user);
   return util.resp(true, '', doc.value);
 };
