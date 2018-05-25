@@ -26,10 +26,10 @@ cd WebChat
 # 安装相关依赖
 npm install
 
-# 以开发模式运行，将会在 localhost:8080 上启动一个带热启动的服务
-npm run dev
+# 安装服务器模块依赖
+cd server && npm install && cd ..
 
-# 构建生产环境代码，存放于 dist 目录
-npm run build
+# 运行
+npm run docker
 ```
 

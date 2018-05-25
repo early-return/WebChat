@@ -177,25 +177,36 @@ const store = new Vuex.Store({
 
     // 初始化应用
     [INITIALIZE]({ state, commit, dispatch }) {
+      // 判断本地是否已存在令牌
       if (localStorage.getItem('token')) {
         commit(TOKEN, localStorage.getItem('token'));
       }
+      // 如果令牌不存在，则结束初始化
       if (!state.token) {
         commit(INITIALIZED, { status: true });
         return;
       }
+      // 通过令牌验证用户身份
       axios.get(`${baseUrl}/auth/${state.token}`)
         .then((response) => {
+          // 如果身份验证成功，则获取一系列信息
           if (response.data.success) {
+            // 获取用户信息
             commit(SELF, response.data.data);
             socket.emit('auth', { token: state.token, uid: state.self._id });
+            // 获取好友列表
             dispatch(FETCH_FRIENDS);
+            // 获取好友消息列表
             dispatch(FETCH_MESSAGES);
+            // 获取群组列表
             dispatch(FETCH_GROUPS);
+            // 获取群组消息列表
             dispatch(FECTH_GROUPS_MESSAGES);
           }
+          // 完成初始化
           commit(INITIALIZED, { status: true });
         }).catch(() => {
+          // 验证身份失败，完成初始化
           commit(INITIALIZED, { status: true });
         });
     },
