@@ -48,7 +48,7 @@ import {
   faComments as groupIconSolid,
   faStar as statusIconSolid,
   faUser as friendsIconSolid,
-  faEllipsisV as menuIcon,
+  faBars as menuIcon,
 } from '@fortawesome/fontawesome-free-solid';
 
 import {
@@ -164,7 +164,8 @@ export default {
     .menu-icon {
       width: 18px;
       height: 18px;
-      padding: 13px;
+      padding-top: 13px;
+      padding-bottom: 13px;
       position: absolute;
       top: 0;
       right: 0;
@@ -242,6 +243,13 @@ export default {
 .nav-item:hover {
   color: $active;
   border-bottom-color: $active;
+}
+
+@media (max-width: $content-mobile-width) {
+  .menu-icon {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
 }
 </style>
 

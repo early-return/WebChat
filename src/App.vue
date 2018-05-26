@@ -44,7 +44,7 @@ export default {
     // 监听是否已初始化及初始化后应跳转的页面
     initialized() {
       if (this.$store.getters.isInitialized) {
-        if (this.router.path === '/index.html') {
+        if (this.$router.path === '/index.html') {
           this.$router.replace('/');
         }
         if (!this.$store.getters.self) {

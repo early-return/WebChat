@@ -4,6 +4,7 @@
     :title="title"
     :messages='messages'
     :aside="aside"
+    :menu="menu"
     @send="sendMessage"
   ></session>
 </template>
@@ -24,6 +25,7 @@ export default {
       title: '与好友的聊天',
       messages: [],
       aside: {},
+      menu: [],
     };
   },
   created() {
@@ -39,8 +41,10 @@ export default {
       if (!friend) {
         // TODO: Not a friend
         console.log('Not a friend');
+        this.menu.push({ title: '加为好友', callback: () => {} });
         return;
       }
+      this.menu.push({ title: '删除好友', callback: () => {} });
       this.setAside(friend);
     },
     initMessages() {

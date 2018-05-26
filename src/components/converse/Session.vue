@@ -1,6 +1,6 @@
 <template>
   <div class="session">
-    <title-bar class="title-bar" :title="title" canBack></title-bar>
+    <title-bar class="title-bar" :menu="menu" :title="title" canBack></title-bar>
     <main class="container">
       <aside class="user-info">
         <user-info :user="aside" :infos="aside.infos"></user-info>
@@ -29,6 +29,7 @@ export default {
     'title',
     'messages',
     'aside',
+    'menu',
   ],
   data() {
     return {

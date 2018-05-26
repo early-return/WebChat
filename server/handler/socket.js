@@ -64,8 +64,6 @@ module.exports = {
           socketMap.set(data.uid, socket);
           idMap.set(socket, data.uid);
           socket.emit('success', { success: true, message: '已连接到服务器！' });
-        }).catch((err) => {
-          socket.emit('error', { success: false, message: err.message });
         });
     });
 

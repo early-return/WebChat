@@ -7,6 +7,12 @@
           <span>{{ title }}</span>
         </a>
       </div>
+      <div class="menu" v-if="menu">
+        <font-awesome-icon class="menu-icon" @click="switchMenu" :icon="menuIcon" />
+        <div class="menu-content" v-if="showingMenu">
+          <div v-for="item in menu" :key="item.title" @click="item.callback" class="menu-item">{{ item.title }}</div>
+        </div>
+      </div>
     </div>
   </header>
 </template>
@@ -15,6 +21,7 @@
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
 import {
   faChevronLeft as backIcon,
+  faBars as menuIcon,
 } from '@fortawesome/fontawesome-free-solid';
 
 
@@ -23,6 +30,8 @@ export default {
   data() {
     return {
       backIcon,
+      menuIcon,
+      showingMenu: false,
     };
   },
   props: {
@@ -31,10 +40,12 @@ export default {
       default: false,
     },
     title: String,
-  },
-  computed: {
+    menu: Array,
   },
   methods: {
+    switchMenu() {
+      this.showingMenu = !this.showingMenu;
+    },
     goBack() {
       if (this.canBack) {
         if (window.history.length > 1) {
@@ -65,6 +76,64 @@ export default {
   color: $gray;
   background-color: $white;
   box-shadow: 0 1px 1px darken($lightgray, 20%);
+
+  .container {
+    position: relative;
+
+    .menu {
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      .menu-icon {
+        width: 18px;
+        height: 18px;
+        padding-top: 13px;
+        padding-bottom: 13px;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .menu-content {
+        position: absolute;
+        width: 6rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        box-shadow: 0px 0px 5px rgba(150, 150, 150, 0.8);
+        top: 45px;
+        right: 0;
+
+        .menu-item {
+          display: block;
+          width: 100%;
+          box-sizing: border-box;
+          text-decoration: none;
+          text-align: center;
+          background-color: #fff;
+          padding: 10px 15px;
+          border-top: 1px olid #eee;
+          color: #66757f;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+
+        hr {
+          width: 100%;
+          margin: 0;
+          box-sizing: border-box;
+          border: 1px solid #eee;
+        }
+      }
+    }
+  }
 }
 .topbar-item {
   display: flex;
@@ -105,6 +174,13 @@ export default {
   &:hover {
     color: $active;
     border-bottom-color: $active;
+  }
+}
+
+@media (max-width: $content-mobile-width) {
+  .topbar .container .menu .menu-icon {
+    padding-left: 13px;
+    padding-right: 13px;
   }
 }
 </style>
