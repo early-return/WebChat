@@ -92,6 +92,8 @@ main.container {
 
       .conversation {
         flex-grow: 1;
+        display: flex;
+        flex-direction: column;
         max-width: $content-max-width;
         box-sizing: border-box;
         width: 100%;

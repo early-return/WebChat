@@ -2,12 +2,12 @@
   <div class="user-info-panel">
     <header>
       <div class="user-info-back-bar">
-        <img v-if="user.bgImage" :src="user.bgImage" :alt="user.name" class="user-info-back-img">
+        <img v-if="user && user.bgImage" :src="user.bgImage" :alt="user.name" class="user-info-back-img">
       </div>
     </header>
     <main class="user-info-content">
-      <img class="user-info-avatar" :src="user.avatar" alt="用户头像">
-      <p class="user-info-name">{{ user.name }}</p>
+      <img class="user-info-avatar" v-if="user && user.avatar" :src="user.avatar" alt="用户头像">
+      <p class="user-info-name">{{ user && user.name ? user.name : '' }}</p>
     </main>
     <footer>
       <router-link v-for="info in infos" :to="info.link" :key="info.title" class="user-info-item">

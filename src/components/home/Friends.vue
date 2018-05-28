@@ -4,10 +4,12 @@
     <router-link class="friend" v-for="friend in friends" :key="friend._id" :to="`/talk/${friend._id}`">
       <img class="avatar" :src="friend.avatar"><div class="name">{{ friend.name }}</div>
     </router-link>
+    <div class="friend nodata" v-if="friends.length < 1">暂时还没有好友，通过右上角的菜单添加一个吧！</div>
     <div class="title">群组</div>
     <router-link class="friend" v-for="group in groups" :key="group._id" :to="`/group/${group._id}`">
       <img class="avatar" :src="group.avatar"><div class="name">{{ group.name }}</div>
     </router-link>
+    <div class="friend nodata" v-if="groups.length < 1">暂时还没有加入群组，通过右上角的菜单加入一个吧！</div>
   </div>
 </template>
 
@@ -58,6 +60,10 @@ export default {
   .name {
     margin-left: 10px;
   }
+}
+
+.nodata {
+  color: $gray;
 }
 </style>
 

@@ -48,6 +48,8 @@ export default {
   padding: 15px;
   display: flex;
   width: 100%;
+  overflow-y: auto;
+  flex-grow: 1;
   box-sizing: border-box;
   color: darken($gray, 20%);
   flex-direction: column-reverse;

@@ -7,6 +7,10 @@
         <button class="btn" @click="publishStatus">发布新动态</button>
       </main>
     </div>
+    <div class="status-item notice" v-if="statusList.length < 1 && !loading && !hasMore">
+      <aside></aside>
+      <main>没有动态信息呢！自己发布一条或添加一些好友吧！</main>
+    </div>
     <div class="status-item" v-if="statusList" v-for="status in statusList" :key="status._id">
       <aside><img class="status-avatar" :src="status.uavatar"></aside>
       <main>
@@ -18,6 +22,10 @@
     <div class="status-item loading-more" v-if="hasMore" @click="fetchMore">
       <aside></aside>
       <main>{{ loading ? '正在加载...' : '加载更多' }}</main>
+    </div>
+    <div class="status-item notice loading-more" v-if="!hasMore && statusList.length > 0">
+      <aside></aside>
+      <main>已经到底了哦！</main>
     </div>
   </div>
 </template>
@@ -96,6 +104,10 @@ export default {
 <style lang="scss" scoped>
 .status-list {
   margin-bottom: 10px;
+
+  .notice {
+    color: $gray;
+  }
 
   .status-item {
     display: flex;
