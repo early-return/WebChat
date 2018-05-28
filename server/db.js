@@ -110,7 +110,7 @@ module.exports = {
       fromUid: new ObjectID(fromId),
       toUid: new ObjectID(toId),
     });
-
+    db.client.close();
     return res;
   },
 
@@ -215,6 +215,17 @@ module.exports = {
     db.client.close();
     return res;
   },
+
+  async removeGroupsUser(gid, uid) {
+    const db = await getDB(COL_GROUP_USERS);
+    const res = await db.col.remove({
+      gid: new ObjectID(gid),
+      uid: new ObjectID(uid),
+    });
+    db.client.close();
+    return res;
+  },
+
 
   async findUserGroups(uid) {
     let db = await getDB(COL_GROUP_USERS);

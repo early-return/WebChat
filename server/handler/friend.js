@@ -1,5 +1,6 @@
 const db = require('../db');
 const util = require('../util');
+const ObjectID = require('mongodb').ObjectID;
 
 const processGetFriends = async (token, uid) => {
   await util.auth(token, uid);
@@ -32,6 +33,29 @@ const processAddFriendWithEmail = async (token, fromId, toEmail) => {
   return res[0];
 };
 
+const processAddFriendWithId = async (token, fromId, toId) => {
+  await util.auth(token, fromId);
+  const af = await db.checkFriend(fromId, toId);
+  if (af) {
+    throw new Error('该用户已是您的好友！');
+  }
+  await db.addFriend(fromId, toId);
+  const res = await db.findUser({ _id: new ObjectID(toId) });
+  if (res.length < 1) {
+    throw new Error('服务器错误！');
+  }
+  return res[0];
+};
+
+const processDeleteFriend = async (token, fromId, toId) => {
+  await util.auth(token, fromId);
+  const res = await db.removeFriend(fromId, toId);
+  if (!res) {
+    throw new Error('服务器错误！');
+  }
+  return res;
+};
+
 module.exports = {
   getFriends(req, res) {
     processGetFriends(req.params.token, req.params.uid)
@@ -47,6 +71,18 @@ module.exports = {
 
   addFriend(req, res) {
     processAddFriendWithEmail(req.body.token, req.body.fromId, req.body.toEmail)
+      .then(data => res.json(util.resp(true, '', data)))
+      .catch(err => res.json(util.resp(false, err.message, err.toString())));
+  },
+
+  addFriendWithId(req, res) {
+    processAddFriendWithId(req.body.token, req.body.fromId, req.body.toId)
+      .then(data => res.json(util.resp(true, '', data)))
+      .catch(err => res.json(util.resp(false, err.message, err.toString())));
+  },
+
+  deleteFriend(req, res) {
+    processDeleteFriend(req.body.token, req.body.fromId, req.body.toId)
       .then(data => res.json(util.resp(true, '', data)))
       .catch(err => res.json(util.resp(false, err.message, err.toString())));
   },

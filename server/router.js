@@ -28,6 +28,8 @@ router.get('/friends/:uid/:token', friend.getFriends);
 // token用于对用户进行认证
 // fromId与toEmail分别为当前用户ID与欲添加好友邮箱
 router.post('/friends/add', friend.addFriend);
+router.post('/friends/addwithid', friend.addFriendWithId);
+router.post('/friend/remove', friend.deleteFriend);
 
 // 消息相关API
 // 获取最近的消息记录，需传入`token`与`uid`进行认证

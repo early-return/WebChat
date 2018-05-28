@@ -373,6 +373,7 @@ const store = new Vuex.Store({
 axios.interceptors.response.use((response) => {
   if (!response.data.success) {
     store.dispatch(SHOW_NOTICE, { message: response.data.message, type: 'error' });
+    console.log(response);
     return Promise.reject(new Error(response.data.err));
   }
   return response;

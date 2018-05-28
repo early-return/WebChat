@@ -11,9 +11,12 @@
 
 <script>
 import Session from '@/components/converse/Session';
+import cfg from '@/config';
 
 import {
   SEND_MESSAGE,
+  FETCH_FRIENDS,
+  SHOW_NOTICE,
 } from '@/types/action-types';
 
 
@@ -23,14 +26,17 @@ export default {
   data() {
     return {
       title: '与好友的聊天',
-      messages: [],
       aside: {},
       menu: [],
     };
   },
   created() {
     this.initAside();
-    this.initMessages();
+  },
+  computed: {
+    messages() {
+      return this.$store.getters.getMessagesByUID(this.id);
+    },
   },
   methods: {
     sendMessage(payload) {
@@ -41,14 +47,35 @@ export default {
       if (!friend) {
         // TODO: Not a friend
         console.log('Not a friend');
-        this.menu.push({ title: '加为好友', callback: () => {} });
+        this.menu.push({ title: '加为好友',
+          callback: () => {
+            this.$http.post(`${cfg.serverAddress}/api/friends/addwithid`, {
+              token: this.$store.state.token,
+              fromId: this.$store.state.self._id,
+              toId: this.id,
+            }).then(() => {
+              this.$store.dispatch(FETCH_FRIENDS);
+              this.$store.dispatch(SHOW_NOTICE, { message: '已成功添加为好友！', type: 'success', timeout: 3000 });
+            });
+          },
+        });
         return;
       }
-      this.menu.push({ title: '删除好友', callback: () => {} });
+      this.menu.push({
+        title: '删除好友',
+        callback: () => {
+          this.$http.post(`${cfg.serverAddress}/api/friend/remove`, {
+            token: this.$store.state.token,
+            fromId: this.$store.state.self._id,
+            toId: friend._id,
+          }).then(() => {
+            this.$store.dispatch(FETCH_FRIENDS);
+            this.$router.go(-1);
+            this.$store.dispatch(SHOW_NOTICE, { message: '删除成功!', type: 'success', timeout: 3000 });
+          });
+        },
+      });
       this.setAside(friend);
-    },
-    initMessages() {
-      this.messages = this.$store.getters.getMessagesByUID(this.id);
     },
     setAside(friend) {
       this.title = `与 ${friend.name} 的聊天`;

@@ -23,12 +23,15 @@ export default {
     return {
       title: '在群组中的聊天',
       aside: {},
-      messages: [],
     };
+  },
+  computed: {
+    messages() {
+      return this.$store.getters.getGroupMessagesByUID(this.id);
+    },
   },
   created() {
     this.initAside();
-    this.initMessages();
   },
   methods: {
     sendMessage(payload) {
@@ -47,9 +50,6 @@ export default {
       ];
       aside.infos = infos;
       this.aside = aside;
-    },
-    initMessages() {
-      this.messages = this.$store.getters.getGroupMessagesByUID(this.id);
     },
   },
   components: {
