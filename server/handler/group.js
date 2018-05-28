@@ -22,6 +22,15 @@ const processAddGroup = async (token, uid, gname) => {
   return res;
 };
 
+const processQuitGroup = async (token, uid, gid) => {
+  await util.auth(token, uid);
+  const res = await db.removeGroupsUser(gid, uid);
+  if (!res) {
+    throw new Error('服务器错误！');
+  }
+  return res;
+};
+
 const processGetGroups = async (token, uid) => {
   await util.auth(token, uid);
   const res = await db.findUserGroups(uid);
@@ -64,5 +73,10 @@ module.exports = {
     processGetGroupMessages(req.params.token, req.params.uid)
       .then(data => res.json(util.resp(true, '', data)))
       .catch(err => res.josn(util.resp(false, err.message, err.toString())));
+  },
+  quitGroup(req, res) {
+    processQuitGroup(req.body.token, req.body.uid, req.body.gid)
+      .then(data => res.json(util.resp(true, '', data)))
+      .catch(err => res.json(util.resp(false, err.message, err)));
   },
 };

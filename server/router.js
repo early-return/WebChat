@@ -46,6 +46,7 @@ router.post('/groups/create', group.createGroup);
 // 传入一个包含`token`,`uid`与`gname`属性的json对象来加入群组
 // gname为欲加入的群组名称
 router.post('/groups/join', group.addGroup);
+router.post('/group/quit', group.quitGroup);
 
 // 动态相关API
 // 获取用户好友的动态

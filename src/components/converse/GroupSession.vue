@@ -4,15 +4,19 @@
     :title="title"
     :messages='messages'
     :aside="aside"
+    :menu="menu"
     @send="sendMessage"
   ></session>
 </template>
 
 <script>
 import Session from '@/components/converse/Session';
+import cfg from '@/config';
 
 import {
   SEND_GROUP_MESSAGE,
+  SHOW_NOTICE,
+  FETCH_GROUPS,
 } from '@/types/action-types';
 
 
@@ -23,6 +27,22 @@ export default {
     return {
       title: '在群组中的聊天',
       aside: {},
+      menu: [
+        {
+          title: '退出群组',
+          callback: () => {
+            this.$http.post(`${cfg.serverAddress}/api/group/quit`, {
+              token: this.$store.state.token,
+              uid: this.$store.state.self._id,
+              gid: this.id,
+            }).then(() => {
+              this.$router.go(-1);
+              this.$store.dispatch(FETCH_GROUPS);
+              this.$store.dispatch(SHOW_NOTICE, { message: '已退出该群组！', type: 'success', timeout: 3000 });
+            });
+          },
+        },
+      ],
     };
   },
   computed: {

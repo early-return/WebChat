@@ -1,12 +1,5 @@
 <template>
-  <session
-    :id="id"
-    :title="title"
-    :messages='messages'
-    :aside="aside"
-    :menu="menu"
-    @send="sendMessage"
-  ></session>
+  <session :id="id" :title="title" :messages='messages' :aside="aside" :menu="menu" @send="sendMessage"></session>
 </template>
 
 <script>
@@ -27,7 +20,6 @@ export default {
     return {
       title: '与好友的聊天',
       aside: {},
-      menu: [],
     };
   },
   created() {
@@ -36,6 +28,37 @@ export default {
   computed: {
     messages() {
       return this.$store.getters.getMessagesByUID(this.id);
+    },
+    menu() {
+      if (this.$store.getters.getFriendByID(this.id)) {
+        return [{
+          title: '删除好友',
+          callback: () => {
+            this.$http.post(`${cfg.serverAddress}/api/friend/remove`, {
+              token: this.$store.state.token,
+              fromId: this.$store.state.self._id,
+              toId: this.id,
+            }).then(() => {
+              this.$store.dispatch(FETCH_FRIENDS);
+              this.$router.go(-1);
+              this.$store.dispatch(SHOW_NOTICE, { message: '删除成功!', type: 'success', timeout: 3000 });
+            });
+          },
+        }];
+      }
+      return [{
+        title: '加为好友',
+        callback: () => {
+          this.$http.post(`${cfg.serverAddress}/api/friends/addwithid`, {
+            token: this.$store.state.token,
+            fromId: this.$store.state.self._id,
+            toId: this.id,
+          }).then(() => {
+            this.$store.dispatch(FETCH_FRIENDS);
+            this.$store.dispatch(SHOW_NOTICE, { message: '已成功添加为好友！', type: 'success', timeout: 3000 });
+          });
+        },
+      }];
     },
   },
   methods: {
@@ -46,35 +69,8 @@ export default {
       const friend = this.$store.getters.getFriendByID(this.id);
       if (!friend) {
         // TODO: Not a friend
-        console.log('Not a friend');
-        this.menu.push({ title: '加为好友',
-          callback: () => {
-            this.$http.post(`${cfg.serverAddress}/api/friends/addwithid`, {
-              token: this.$store.state.token,
-              fromId: this.$store.state.self._id,
-              toId: this.id,
-            }).then(() => {
-              this.$store.dispatch(FETCH_FRIENDS);
-              this.$store.dispatch(SHOW_NOTICE, { message: '已成功添加为好友！', type: 'success', timeout: 3000 });
-            });
-          },
-        });
         return;
       }
-      this.menu.push({
-        title: '删除好友',
-        callback: () => {
-          this.$http.post(`${cfg.serverAddress}/api/friend/remove`, {
-            token: this.$store.state.token,
-            fromId: this.$store.state.self._id,
-            toId: friend._id,
-          }).then(() => {
-            this.$store.dispatch(FETCH_FRIENDS);
-            this.$router.go(-1);
-            this.$store.dispatch(SHOW_NOTICE, { message: '删除成功!', type: 'success', timeout: 3000 });
-          });
-        },
-      });
       this.setAside(friend);
     },
     setAside(friend) {
