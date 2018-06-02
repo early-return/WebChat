@@ -17,6 +17,7 @@ import {
   SEND_GROUP_MESSAGE,
   SHOW_NOTICE,
   FETCH_GROUPS,
+  FETCH_GROUPS_MESSAGES,
 } from '@/types/action-types';
 
 
@@ -38,6 +39,7 @@ export default {
             }).then(() => {
               this.$router.go(-1);
               this.$store.dispatch(FETCH_GROUPS);
+              this.$store.dispatch(FETCH_GROUPS_MESSAGES);
               this.$store.dispatch(SHOW_NOTICE, { message: '已退出该群组！', type: 'success', timeout: 3000 });
             });
           },

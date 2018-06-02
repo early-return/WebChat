@@ -36,7 +36,7 @@ import {
   SHOW_OPERATION_BOX,
   ADD_FRIEND,
   FETCH_GROUPS,
-  FECTH_GROUPS_MESSAGES,
+  FETCH_GROUPS_MESSAGES,
   ADD_GROUP,
   CREATE_GROUP,
 } from '@/types/action-types';
@@ -201,7 +201,7 @@ const store = new Vuex.Store({
             // 获取群组列表
             dispatch(FETCH_GROUPS);
             // 获取群组消息列表
-            dispatch(FECTH_GROUPS_MESSAGES);
+            dispatch(FETCH_GROUPS_MESSAGES);
           }
           // 完成初始化
           commit(INITIALIZED, { status: true });
@@ -320,7 +320,7 @@ const store = new Vuex.Store({
           commit(GROUPS, response.data.data);
         });
     },
-    [FECTH_GROUPS_MESSAGES]({ state, commit }) {
+    [FETCH_GROUPS_MESSAGES]({ state, commit }) {
       axios.get(`${baseUrl}/messages/group/${state.self._id}/${state.token}`)
         .then((response) => {
           commit(GROUP_MESSAGES, response.data.data);

@@ -19,6 +19,8 @@
     "@fortawesome/vue-fontawesome": "0.0.22",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "mocha": "^5.2.0",
+    "nightmare": "^3.0.1",
     "socket.io-client": "^2.1.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
