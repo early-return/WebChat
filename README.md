@@ -4,12 +4,8 @@
 
 ## 截图
 
-<img src="examples/menu_mobile.png" width="300">
-<img src="examples/friends_mobile.png" width="300">
-<img src="examples/talking.jpg" width="300">
-<img src="examples/status_mobile.png" width="300">
-<img src="examples/profile.jpg" width="300">
-<img src="examples/add_friend_mobile.png" width="300">
+<img src="examples/menu_mobile.png" width="300"><img src="examples/friends_mobile.png" width="300"><img src="examples/talking.jpg" width="300">
+<img src="examples/status_mobile.png" width="300"><img src="examples/profile.jpg" width="300"><img src="examples/add_friend_mobile.png" width="300">
 
 
 > 移动端截图
