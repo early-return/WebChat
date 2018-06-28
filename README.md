@@ -2,9 +2,15 @@
 
 > 一个基于Web的IM应用
 
-## 示例
+## 截图
 
-<img src="examples/mobile1.jpg" width="300"><img src="examples/mobile2.jpg" width="300">
+<img src="examples/menu_mobile.png" width="300">
+<img src="examples/friends_mobile.png" width="300">
+<img src="examples/talking.jpg" width="300">
+<img src="examples/status_mobile.png" width="300">
+<img src="examples/profile.jpg" width="300">
+<img src="examples/add_friend_mobile.png" width="300">
+
 
 > 移动端截图
 
@@ -15,6 +21,8 @@
 > 桌面端截图
 
 ## 构建
+
+> 主机上需装有 Nodejs 与 Docker
 
 ```bash
 # 从Github拉取到本地
